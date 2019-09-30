@@ -5,7 +5,7 @@
 - node-red
 - node-red-nodes
 - node-red-dashboard
-- We will try to merge above 3 components to single framewordk with addition of simulation/debugging supporting to 3rd project team.
+- We will try to merge above 3 components to single framework with addition of simulation/debugging supporting to 3rd project team.
 
 ## How to Contribute?
 - Feel free to create issues/pull-requests if you have any issues.
