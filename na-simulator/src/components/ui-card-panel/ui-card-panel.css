@@ -1,0 +1,52 @@
+.masonry-container {
+	position: relative;
+	width: 100%;
+    margin: 0 auto;
+}
+
+.masonry-container > * {
+	position: absolute;
+	opacity: 0;
+}
+
+.masonry-container > .visible {
+	opacity: 1;
+}
+
+.nr-dashboard-cardpanel {
+    box-sizing: border-box;
+}
+
+.nr-dashboard-cardpanel > p {
+    max-height: 31px;
+    min-height: 31px;
+    margin-left: 12px;
+	margin-top: 10px;
+	margin-bottom: 8px;
+    font-weight: 500;
+    font-size: larger;
+}
+
+.nr-dashboard-cardcarat:focus {
+    outline: 0;
+}
+
+.nr-dashboard-cardcarat {
+    float: right;
+    vertical-align: baseline;
+    margin-right: 12px;
+}
+
+.nr-dashboard-cardcontainer {
+	position: relative;
+}
+
+.nr-dashboard-cardcontainer > * {
+	margin: 0 !important;
+	position: absolute;
+	opacity: 0;
+}
+
+.nr-dashboard-cardcontainer > .visible {
+	opacity: 1;
+}

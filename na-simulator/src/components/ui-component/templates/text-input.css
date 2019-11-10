@@ -1,0 +1,35 @@
+/*
+overwrite the default md-errors-spacer min-height
+reason: https://github.com/angular/material/issues/6214
+*/
+
+.nr-dashboard-textinput md-input-container {
+	padding: 0px 12px;
+	margin: 15px 0px;
+	transition: 0.3s margin;
+	-webkit-transition: 0.3s margin;
+}
+
+.nr-dashboard-textinput md-input-container .md-input {
+	padding-top: 1px;
+}
+
+.nr-dashboard-textinput md-input-container .md-errors-spacer {
+	min-height: 0;
+}
+
+.nr-dashboard-textinput md-input-container .md-placeholder,
+.nr-dashboard-textinput md-input-container label:not(.md-no-float):not(.md-container-ignore) {
+	padding-left: 12px;
+    margin-bottom: 3px;
+}
+
+.nr-dashboard-textinput md-input-container.md-input-focused.has-label label:not(.md-no-float):not(.md-container-ignore),
+.nr-dashboard-textinput md-input-container.md-input-has-value.has-label label:not(.md-no-float):not(.md-container-ignore) {
+	margin-bottom: -2px;
+}
+
+.nr-dashboard-textinput md-input-container.md-input-focused.has-label,
+.nr-dashboard-textinput md-input-container.md-input-has-value.has-label {
+	margin: 15px 0px 5px;
+}

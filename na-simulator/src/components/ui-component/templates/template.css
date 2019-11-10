@@ -1,0 +1,24 @@
+.nr-dashboard-template {
+	overflow-y: auto;
+    vertical-align: inherit;
+}
+
+.nr-dashboard-template p {
+	margin: 0.2em 0;
+}
+
+.nr-dashboard-template h4 {
+	margin: 0.2em 0;
+}
+
+.nr-dashboard-template h3 {
+	margin: 0.2em 0;
+}
+
+.nr-dashboard-template h2 {
+	margin: 0.3em 0;
+}
+
+.nr-dashboard-template h1 {
+	margin: 0.4em 0;
+}

@@ -1,0 +1,27 @@
+CACHE MANIFEST
+# Time: Wed Nov 06 2019 21:20:47 GMT+0000 (Greenwich Mean Time)
+
+CACHE:
+i18n.js
+icon120x120.png
+icon192x192.png
+icon64x64.png
+css/app.min.css
+css/app.min.less
+css/gridstack-extra.min.css
+css/gridstack.min.css
+js/app.min.js
+js/gridstack.jQueryUI.min.js
+js/gridstack.min.js
+js/lodash.min.js
+js/tinycolor-min.js
+socket.io/socket.io.js
+fonts/fontawesome-webfont.woff
+fonts/fontawesome-webfont.woff2
+fonts/weather-icons-lite.woff
+fonts/weather-icons-lite.woff2
+
+NETWORK:
+*
+
+# hash: 3dda967b3a65818525016b3382b19f34c0e543262fb97925a631a68e22a1640c

@@ -1,0 +1,31 @@
+.nr-dashboard-button {
+	background: none;
+}
+
+.nr-dashboard-button .md-button {
+    box-shadow: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0px !important;
+    min-width: 0px !important;
+    min-height: 0px !important;
+}
+
+md-card .nr-dashboard-button {
+    padding: 2px !important;
+}
+
+.nr-dashboard-button i {
+    vertical-align: middle;
+    width: unset;
+}
+
+.nr-dashboard-button .fa-2x {
+    vertical-align: middle;
+    padding-bottom: 2px;
+}
+
+.nr-dashboard-button .fa-3x {
+    vertical-align: middle;
+    padding-bottom: 1px;
+}

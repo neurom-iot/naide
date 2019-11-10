@@ -1,0 +1,256 @@
+
+<script type="text/x-red" data-template-name="twitter-credentials">
+    <div class="form-row">
+        <label for="node-config-input-screen_name"><i class="fa fa-twitter"></i> <span data-i18n="twitter.label.twitter-id"></span></label>
+        <i class="fa fa-at"></i> <input type="text" id="node-config-input-screen_name">
+    </div>
+    <div class="form-row">
+        <p style="margin-top: 30px;"><b>1.</b> <span data-i18n="twitter.label.create"></span> <a href="https://developer.twitter.com/en/apps" target="_blank" style="text-decoration:underline;">developer.twitter.com/en/apps</a></p>
+    </div>
+    <div class="form-row">
+        <p style="margin-top: 30px;"><b>2.</b> <span data-i18n="twitter.label.copy-consumer"></span></p>
+    </div>
+    <div class="form-row">
+        <label style="margin-left: 20px;" for="node-config-input-consumer_key"><span data-i18n="twitter.label.consumer_key"></span></label>
+        <input type="password" id="node-config-input-consumer_key">
+    </div>
+    <div class="form-row">
+        <label style="margin-left: 20px;" for="node-config-input-consumer_secret"><span data-i18n="twitter.label.consumer_secret"></span></label>
+        <input type="password" id="node-config-input-consumer_secret">
+    </div>
+
+    <div class="form-row">
+        <p style="margin-top: 30px;"><b>3.</b> <span data-i18n="twitter.label.copy-accessToken"></span></p>
+    </div>
+    <div class="form-row">
+        <label style="margin-left: 20px;" for="node-config-input-access_token"><span data-i18n="twitter.label.access_key"></span></label>
+        <input type="password" id="node-config-input-access_token">
+    </div>
+    <div class="form-row">
+        <label style="margin-left: 20px;" for="node-config-input-access_token_secret"><span data-i18n="twitter.label.access_secret"></span></label>
+        <input type="password" id="node-config-input-access_token_secret">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="twitter-credentials">
+    <p>Authentication for the Twitter API</p>
+    <p>Earlier versions of this node provided one-click authentication. Twitter removed the ability
+       to do that in June 2018. You must now register your own application with
+       <a href="https://developer.twitter.com/">Twitter</a> and generate your own access tokens.</p>
+
+</script>
+
+
+<script type="text/javascript">
+(function() {
+    var twitterConfigNodeId = null;
+    var twitterConfigNodeIntervalId = null;
+
+    RED.nodes.registerType('twitter-credentials',{
+        category: 'config',
+        defaults: {
+            screen_name: {value:""}
+        },
+        credentials: {
+            consumer_key: { type: "password"},
+            consumer_secret: { type: "password" },
+            access_token: {type: "password"},
+            access_token_secret: {type:"password"}
+        },
+        label: function() {
+            if (this.screen_name) {
+                return (this.screen_name[0]!=="@"?"@":"")+this.screen_name
+            } else {
+                return "Twitter: "+this.id
+            }
+        },
+        exportable: false,
+        oneditsave: function() {
+            var trimFields = [
+                "consumer_key",
+                "consumer_secret",
+                "access_token",
+                "access_token_secret"
+            ];
+            // Just in case any whitespace has crept in with the copy-paste of the fields
+            trimFields.forEach(function(field) {
+                var v = $("#node-config-input-"+field).val();
+                v = v.trim();
+                $("#node-config-input-"+field).val(v);
+
+            });
+        }
+    });
+})();
+</script>
+
+<script type="text/x-red" data-template-name="twitter in">
+    <div class="form-row">
+        <label for="node-input-twitter"><i class="fa fa-user"></i> <span data-i18n="twitter.label.twitter-id"></span></label>
+        <input type="text" id="node-input-twitter">
+    </div>
+    <div class="form-row">
+        <label for="node-input-user"><i class="fa fa-search"></i> <span data-i18n="twitter.label.search"></span></label>
+        <select type="text" id="node-input-user" style="display: inline-block; vertical-align: middle; width:60%;">
+            <option value="false" data-i18n="twitter.search.public"></option>
+            <option value="true" data-i18n="twitter.search.follow"></option>
+            <option value="user" data-i18n="twitter.search.user"></option>
+            <option value="dm" data-i18n="twitter.search.direct"></option>
+        </select>
+    </div>
+    <div class="form-row" id="node-input-tags-row">
+        <label for="node-input-tags"><i class="fa fa-tags"></i> <span id="node-input-tags-label" data-i18n="twitter.label.for"></span></label>
+        <input type="text" id="node-input-tags" data-i18n="[placeholder]twitter.placeholder.for">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+    <div class="form-tips"><span data-i18n="[html]twitter.tip"></span></div>
+</script>
+
+<script type="text/x-red" data-help-name="twitter in">
+    <p>Twitter input node. Can be used to search either:
+    <ul><li>the public stream for tweets containing the configured search term</li>
+        <li>tweets from accounts that the authenticated user follows</li>
+        <li>tweets by specified users</li>
+        <li>direct messages received by the authenticated user</li>
+    </ul></p>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>the text of the tweet</dd>
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>set to <code>tweets/<i>screen_name</i></code></dd>
+        <dt>tweet <span class="property-type">object</span></dt>
+        <dd>the full tweet object returned by the Twitter API</dd>
+        <dt>location <span class="property-type">object</span></dt>
+        <dd>location information associated with the tweet, if known</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>When searching for multiple terms, use a space for <i>and</i> and comma `,` for <i>or</i>.</p>
+    <p>The full tweet object is documented <a href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object" target="_new">here</a>.</p>
+    <p><b>Note:</b> this node is subject to the rate limiting restrictions of the Twitter
+      API. It polls the API once a minute for updates. If you deploy frequently you may
+      exceed the limit. The node will automatically delay polling until the end of the current
+      rate limiting window.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('twitter in',{
+        category: 'social-input',
+        color:"#C0DEED",
+        defaults: {
+            twitter: {type:"twitter-credentials",required:true},
+            tags: {value:""},
+            user: {value:"false",required:true},
+            name: {value:""},
+            inputs: {value:0}
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "twitter.png",
+        label: function() {
+            if (this.name) {
+                return this.name;
+            }
+            var uname = RED.nodes.node(this.twitter);
+            if (this.user == "dm") {
+                return (uname?uname.label()+" ":"")+this._("twitter.label.dmslabel");
+            } else if (this.user == "event") {
+                var user = RED.nodes.node(this.twitter);
+                return (user?user.label()+" ":"")+this._("twitter.label.eventslabel");
+            } else if (this.user == "user") {
+                return this.tags+" "+this._("twitter.label.tweetslabel");
+            }
+            else if (this.user == "true") {
+                return this._("twitter.label.followers") + (uname?(" "+uname.label()):"");
+            }
+            return "twitter";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            var userlabel = this._("twitter.label.user");
+            var userph = this._("twitter.placeholder.user");
+            var forlabel = this._("twitter.label.for");
+            var forph = this._("twitter.placeholder.for");
+            $("#node-input-user").change(function() {
+                var type = $("#node-input-user option:selected").val();
+                if (type == "user") {
+                    $("#node-input-tags-row").show();
+                    $("#node-input-tags-label").html(userlabel);
+                    $("#node-input-tags").attr("placeholder",userph);
+                } else if ((type == "dm")||(type == "true")||(type == "event")) {
+                    $("#node-input-tags-row").hide();
+                } else {
+                    $("#node-input-tags-row").show();
+                    $("#node-input-tags-label").html(forlabel);
+                    $("#node-input-tags").attr("placeholder",forph);
+                }
+            });
+            $("#node-input-user").change();
+        },
+        oneditsave: function() {
+            if ($('#node-input-tags').val() === '' && $("#node-input-user option:selected").val() === 'false') {
+                this.inputs = 1;
+            }
+            else {
+                //set back the default state of 0 inputs
+                //this.inputs = 0;
+            }
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="twitter out">
+    <div class="form-row">
+        <label for="node-input-twitter"><i class="fa fa-user"></i> <span data-i18n="twitter.label.twitter-id"></span></label>
+        <input type="text" id="node-input-twitter">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="twitter out">
+    <p>Send tweets and direct messages.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Sent as the body of the tweet. See below for how to send a Direct Message</dd>
+        <dt class="optional">media <span class="property-type">buffer</span></dt>
+        <dd>A Buffer of an image to attach to the tweet</dd>
+        <dt class="optional">params <span class="property-type">object</span></dt>
+        <dd>Additional parameters to pass to the Twitter status update API.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>This nodes sends a tweet for the authenticated user. If <code>msg.media</code>
+    is set and contains a Buffer, it is attached as an image.</p>
+    <p>To send a Direct Message, the payload should be formatted as: <code>D {username} {message}</code>.</p>
+    <p>Note that you cannot attach an image to a direct message.</p>
+    <p>If <code>msg.params</code> exists and is an object of name:value pairs, they
+       will be included in the request to the Twitter api. The available values are documented
+       <a href="https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/post-statuses-update#parameters" target="_new">here</a>.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('twitter out',{
+        category: 'social-output',
+        color:"#C0DEED",
+        defaults: {
+            twitter: {type:"twitter-credentials",required:true},
+            name: {value:"Tweet"}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "twitter.png",
+        align: "right",
+        label: function() {
+            return this.name;
+        }
+    });
+</script>

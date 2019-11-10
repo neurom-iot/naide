@@ -1,0 +1,90 @@
+/*
+overwrite the default md-errors-spacer min-height
+reason: https://github.com/angular/material/issues/6214
+*/
+
+.nr-dashboard-colour-picker p {
+    padding: 0 0 0 12px;
+}
+
+.color-picker-wrapper {
+    padding-right: 12px;
+}
+
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open {
+    width: 32px;
+    border-width: 0px;
+}
+
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline {
+    right: 121px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-lightness {
+    right: 141px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-alpha {
+    right: 141px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-hue {
+    right: 141px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-hue.color-picker-show-alpha {
+    right: 161px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-hue.color-picker-show-lightness {
+    right: 161px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-alpha.color-picker-show-lightness {
+    right: 161px;
+}
+.color-picker-wrapper.color-picker-swatch-only.color-picker-open .color-picker-panel.color-picker-panel-right.color-picker-show-inline.color-picker-show-hue.color-picker-show-alpha.color-picker-show-lightness {
+    right: 181px;
+}
+
+.color-picker-wrapper .input-group .input-group-addon {
+    padding: 12px 12px;
+    border-width: 0px;
+}
+
+.color-picker-wrapper.color-picker-swatch-only .input-group .input-group-addon {
+    width: 0px;
+}
+
+.color-picker-wrapper.color-picker-swatch-only .input-group .input-group-addon:last-child {
+    border-left-width: 0px;
+}
+
+.color-picker-wrapper .input-group .input-group-addon:last-child {
+    border-width: 0px;
+    width: 1px;
+}
+
+.color-picker-wrapper .input-group .color-picker-input {
+    position: relative;
+    width: 123px;
+    height: 20px;
+    text-indent: 6px;
+    text-align: center;
+    font-size: smaller;
+    padding-right: 4px;
+}
+
+.color-picker-wrapper .color-picker-swatch:not(.input-group-addon).color-picker-swatch-right {
+    /* right: -1px; */
+}
+
+.color-picker-input-wrapper {
+    width: 100%;
+}
+
+.color-picker-input-wrapper > input {
+    width: 164px;
+    height: 22px;
+    text-indent: 6px;
+    font-size: smaller;
+    border-width: 0px;
+}
+
+.color-picker-show-inline {
+    z-index: 77 !important;
+}

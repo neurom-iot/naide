@@ -1,0 +1,41 @@
+{
+    "name"          : "node-red-node-emoncms",
+    "version"       : "0.2.1",
+    "description"   : "A Node-RED node to fetch/post data to/from emoncms",
+    "dependencies"  : {
+    },
+    "repository" : {
+        "type":"git",
+        "url":"https://github.com/node-red/node-red-nodes/tree/master/io/emoncms"
+    },
+    "license": "Apache-2.0",
+    "keywords": [ "node-red", "emoncms" ],
+    "node-red"      : {
+        "nodes"     : {
+            "emoncms": "88-emoncms.js"
+        }
+    },
+    "author": {
+        "name": "Henrik Olsson",
+        "email": "henols@gmail.com",
+        "url": "http://nodered.org"
+    },
+    "maintainers": [
+        {
+            "name": "dceejay",
+            "email": "ceejay@vnet.ibm.com"
+        },
+        {
+            "name": "knolleary",
+            "email": "nick.oleary@gmail.com"
+        },
+        {
+            "name": "Glyn Hudson",
+            "email": "glyn.hudson@openenergymonitor.org"
+       },
+       {
+           "name": "borpin",
+           "email": "brian.orpin@gmail.com"
+      }
+    ]
+}

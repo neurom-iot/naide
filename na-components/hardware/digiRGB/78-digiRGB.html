@@ -1,0 +1,34 @@
+
+<script type="text/x-red" data-template-name="digiRGB">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="DigiSpark">
+    </div>
+    <div class="form-tips">Expects a <code>msg.payload</code> with three part csv string of r,g,b.</div>
+</script>
+
+<script type="text/x-red" data-help-name="digiRGB">
+    <p>Simple output node to drive digispark RGB</p>
+    <p>Requires <code>msg.payload</code> to be of the form 'r,g,b' decimals 0-255, or a hex string "#rrggbb". For example:</p>
+    <ul><li>Red : "255,0,0"</li><li>Green : "#00FF00"</li></ul>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('digiRGB',{
+        category: 'output',
+        color:"GoldenRod",
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "light.png",
+        align: "right",
+        label: function() {
+            return this.name||"digiSparkRGB";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>

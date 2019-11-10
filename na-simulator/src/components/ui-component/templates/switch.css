@@ -1,0 +1,33 @@
+.nr-dashboard-switch:focus {
+	outline: 0px;
+}
+
+.nr-dashboard-switch:hover {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+.nr-dashboard-switch p {
+    padding: 0 0 0 12px;
+}
+
+.nr-dashboard-switch md-switch {
+    padding: 0 8px 0 8px;
+}
+
+.nr-dashboard-switch md-switch:hover {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+.nr-dashboard-switch md-switch.center{
+    margin: 0px auto;
+}
+
+.nr-dashboard-switch ui-icon {
+    padding: 0 8px;
+}
+
+.nr-dashboard-switch ui-icon.center{
+    margin: 0px auto;
+}

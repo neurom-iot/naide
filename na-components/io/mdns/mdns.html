@@ -1,0 +1,107 @@
+
+<script type="text/x-red" data-template-name="discovery">
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-gear"></i> Service</label>
+        <input type="text" id="node-input-service" placeholder="_http._tcp">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+        <input type="text" id="node-input-topic" placeholder="Topic">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-tips">The service <i>must</i> start with an underscore _ and end ._tcp or ._udp</div>
+</script>
+
+<script type="text/x-red" data-help-name="discovery">
+    <p>Provides a Bonjour / Avahi / Zeroconf discovery node.</p>
+    <p><code>msg.payload</code> contains the service object on both arrival and leaving.</p>
+    <p><code>msg.payload.state</code> contains boolean <i>true</i> or <i>false</i> depending
+    if the service has arrived (<i>true</i>) or gone away (<i>false</i>).</p>
+    <p>Within the msg.payload object the most interesting things are:
+    <ul><li>msg.payload.name</li>
+    <li>msg.payload.networkInterface</li>
+    <li>msg.payload.host</li>
+    <li>msg.payload.port</li>
+    <li>msg.payload.addresses - an array</li>
+    <li>msg.payload.txtRecord - an object</li></ul></p>
+    <p>For a full list of official service types see <i><a href="http://www.dns-sd.org/ServiceTypes.html" target="_new">this list</a></i>.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('discovery',{
+        category: 'network-input',
+        color:"palegoldenrod",
+        defaults: {
+            name: {value:""},
+            topic: {value:""},
+            service: {value:"",required:true,validate:RED.validators.regex(/^_.*\._(tc|ud)p$/)}
+        },
+        inputs:0,
+        outputs:1,
+        icon: "bonjour.png",
+        label: function() {
+            return this.name||this.service||"discovery";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="announce">
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-gear"></i> Service</label>
+        <input type="text" id="node-input-service" placeholder="_http._tcp">
+    </div>
+    <div class="form-row">
+        <label for="node-input-port"><i class="fa fa-random"></i> Port</label>
+        <input type="text" id="node-input-port" placeholder="9999">
+    </div>
+    <div class="form-row">
+        <label for="node-input-txt"><i class="fa fa-tasks"></i> TxtRecord</label>
+        <input type="text" id="node-input-txt" placeholder='"name":"value","name2":"value2"'>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name of service">
+    </div>
+    <div class="form-tips">%h in the name will be replaced by the machine hostname.</div>
+</script>
+
+<script type="text/x-red" data-help-name="announce">
+    <p>Provides a Bonjour / Avahi / Zeroconf announcement node.</p>
+    <p>If <code>msg.payload</code> is <code>false</code> - the announcement is stopped. Any other value starts the announcement process.</p>
+    <p>The announcement can be customised by the msg if not configured in the edit panel.</p>
+    <p><ul>
+        <li><code>msg.service</code> - For a full list of official service types see <i><a href="http://www.dns-sd.org/ServiceTypes.html" target="_new">this list</a></i>.</li>
+        <li><code>msg.port</code> - the tcp or udp port to use.</li>
+        <li><code>msg.name</code> - the short description name of the service. If you use %h in the name, it will be replaced by the machine hostname.</li>
+        <li><code>msg.txtRecord</code> - a javascript object of name:value pairs.</li>
+    </ul></p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('announce',{
+        category: 'network-output',
+        color:"palegoldenrod",
+        defaults: {
+            name: {value:""},
+            service: {value:"",required:true,validate:RED.validators.regex(/^_.*\._(tc|ud)p$/)},
+            port: {value:""},
+            txt: {value:""}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "bonjour.png",
+        align:"right",
+        label: function() {
+            return this.name||this.service||"announce";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>

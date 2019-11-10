@@ -1,0 +1,13 @@
+.nr-dashboard-numeric {
+    padding: 0 0 0 12px;
+}
+
+.nr-dashboard-numeric .value {
+    font-weight: bold;
+    text-align: center;
+    border: 0px;
+}
+
+.nr-dashboard-numeric .md-button {
+    margin: 0;
+}
