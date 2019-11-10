@@ -1,11 +1,11 @@
 # naide
 - Neuromorphic Architecture Integrated Development Environment
 
-## Related repositories forked from [node-red](https://github.com/node-red) official github.
-- node-red
-- node-red-nodes
-- node-red-dashboard
-- We will try to merge above 3 components to single framework with addition of simulation/debugging supporting to 3rd project team.
+## Related repositories copied from [node-red](https://github.com/node-red) official github.
+- node-red to naide-main
+- node-red-nodes to naide-components
+- node-red-dashboard to na-simulator
+- We will try to develop above 3 modules to support neuromorphic architecture IoT components with addition of simulation/debugging supporting to 3rd project team.
 
 ## How to Contribute?
 - Feel free to create issues/pull-requests if you have any issues.
