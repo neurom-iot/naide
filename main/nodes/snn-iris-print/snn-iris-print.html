@@ -1,0 +1,31 @@
+<script type="text/x-red" data-template-name="snn-iris-print">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="snn-iris-print">
+    <p>입력된 IRIS Train 결과를 시각화 정리하여 내보냅니다.</p>
+    <p>이 노드의 출력값은 NA-Visualizer 노드를 통해 자세하게 확인할 수 있습니다.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('snn-iris-print',{
+        category: 'function',
+        color: '#a566ff',
+        defaults: {
+            name: {value: "SNN-IRIS-Print"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"snn-iris-print";
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>
