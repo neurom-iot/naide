@@ -19,7 +19,7 @@ import nengo_dl
 # Recv. Input dataset
 data = sys.argv[1].split('|')
 input_x = float(data[0])
-res_y = float(data[1])
+res_y =float(data[1])
 
 # neuron type
 amp = 1
@@ -58,7 +58,7 @@ n_steps = 300
 test_data = {
         inp: np.tile(np.reshape(x_test, (x_test.shape[0], 1, 1)), (1, n_steps, 1)),
         out_p_filt: np.tile(np.reshape(y_test, (y_test.shape[0], 1, 1)), (1, n_steps, 1))      
-      }
+    }
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
 sys.stdout = oldstdout
 print(sim.data[out_p_filt][-1][-1])

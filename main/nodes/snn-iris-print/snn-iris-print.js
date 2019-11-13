@@ -1,38 +1,40 @@
 module.exports = function(RED) {
-    function NeuromorphicArchitectureNode(n) {
+    function SNN_IRIS_Print(n) {
         RED.nodes.createNode(this, n);
-        var when = require('when');
         var node = this;
-        this.min = n.min;
-        this.max = n.max;
-        this.savePath = n.savePath
-        var prom = function(min, max) {
-            return when.promise(function(res, rej) {
-                const spawn = require("child_process").spawn;
-                const pythonProcess = spawn('python', ["./createNode/python/test.py", min.toString(), max.toString()]);
-                pythonProcess.stdout.on('data', function(data) {
-                    res(data);
-                });
-            });
-        }
-        var sendFunction = (data) => {
-            console.log(data.toString());
-            if (this.min === this.max) {
-                this.send(null);
+        var parseJson = (json, level=0) => {
+            res = "";
+            for(data in json) {
+                if (level == 0)
+                    res += "[" + data + "]" + '\n';
+                if (typeof(json[data]) == "object"){
+                    res += parseJson(json[data], level + 1);
+                }
+                else {
+                    res += "  ".repeat(level < 2 ? 1 : level);
+                    res += (level > 0 ? data + " : " + json[data] : json[data]) + '\n';
+                }
             }
-            else {
-                //var str = data.toString().replace("\n", "");
-                //str = Number(str).toString();
-                this.msg.payload = data.toString();
-                this.send(this.msg);
+            return res;
+        };
+        var sendFunction = (msg) => {
+            // Debug / PkgMgr
+            json = {
+                random_select_param:{x_data:msg.x_data, y_data:msg.y_data},
+                implement:msg.implement,
+                err_rate:msg.err_rate
             }
+            debug = parseJson(json);
+            pkgmgr = "";
+            msg.payload = debug;
+            msg.pkgmgr = pkgmgr;
+            this.send(msg);
         };
         node.on('input', function(msg) {
             console.log(msg);
-            this.msg = msg;
-            prom(this.min, this.max).then(sendFunction, ()=>{});
+            sendFunction(msg);
         });
         
     }
-    RED.nodes.registerType("na-node", NeuromorphicArchitectureNode);
+    RED.nodes.registerType("snn-iris-print", SNN_IRIS_Print);
 }

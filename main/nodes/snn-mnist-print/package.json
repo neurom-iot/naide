@@ -1,0 +1,20 @@
+{
+  "name": "snn-mnist-print",
+  "version": "1.0.0",
+  "description": "hci_snn-mnist-print",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-mnist-print"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-mnist-print": "snn-mnist-print.js"
+    }
+  },
+  "keywords": [
+    "snn-mnist-print"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
+

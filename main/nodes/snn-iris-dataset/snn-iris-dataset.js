@@ -15,6 +15,9 @@ module.exports = function(RED) {
             var msg = {};
             console.log(data.toString());
             msg.payload = data.replace('\r\n', '').toString();
+            split_data = data.split("|", 2);
+            msg.x_data = Number(split_data[0]);
+            msg.y_data = Number(split_data[1]);
             this.send(msg);
         };
         node.on('input', function(msg) {

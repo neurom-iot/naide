@@ -1,0 +1,20 @@
+{
+  "name": "snn-mnist-dataset",
+  "version": "1.0.0",
+  "description": "hci_snn-mnist-dataset",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-mnist-dataset"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-mnist-dataset": "snn-mnist-dataset.js"
+    }
+  },
+  "keywords": [
+    "snn-mnist-dataset"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
+
