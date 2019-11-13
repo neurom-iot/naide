@@ -14,7 +14,7 @@ module.exports = function(RED) {
         var sendFunction = (data) => {
             var msg = {};
             console.log(data.toString());
-            msg.payload = data.toString();
+            msg.payload = data.replace('\r\n', '').toString();
             this.send(msg);
         };
         node.on('input', function(msg) {

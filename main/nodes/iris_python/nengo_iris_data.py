@@ -1,16 +1,12 @@
 import os
 import sys
 
+# Disable sys.out
 class NullWriter (object):
     def write (self, arg):
         pass
     def flush(args):
         pass
-def print2(*args):
-    res = ""
-    for s in args:
-        res += str(s)
-    return res + "\n"
 
 import numpy as np
 import random
@@ -36,7 +32,6 @@ random_x_test = x_test[rv]
 result_y_test = y_test[rv]
 
 sys.stdout = oldstdout
-#print(str(rv))
-print(str(random_x_test))
-#print(str(result_y_test))
+res = str(random_x_test).replace('[', '').replace(']', '') + '|' + str(result_y_test).replace('[', '').replace(']', '')
+print(res)
 sys.out.flush()
