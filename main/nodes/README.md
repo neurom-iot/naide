@@ -9,10 +9,12 @@ IRIS, MNIST 에 대한 훈련 데이터와 분류 소스에 대한 폴더
 ### 3. -implement
 dataset을 input으로 받아 trainning 데이터를 기반으로 분류한 결과값을 output으로 내보내는 노드
 ### 4. -print
-implement를 input으로 받아 Debug/Visualizer 형태로 변환하여 output으로 내보내는 노드
+implement를 input으로 받아 Debug/PkgMgr 형태로 변환하여 output으로 내보내는 노드
 
 ## 업데이트
 ### - Verion 0.1.0
 Initial project verion
 
+### - Verion 0.1.1
+Visualizer -> PackageManager 명칭 변경
 

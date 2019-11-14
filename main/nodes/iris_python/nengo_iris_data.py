@@ -35,3 +35,13 @@ sys.stdout = oldstdout
 res = str(random_x_test).replace('[', '').replace(']', '') + '|' + str(result_y_test).replace('[', '').replace(']', '')
 print(res)
 sys.out.flush()
+
+
+
+
+
+
+
+
+
+

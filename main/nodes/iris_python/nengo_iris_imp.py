@@ -41,13 +41,9 @@ with nengo.Network(seed=seed) as net:
     net.config[nengo.Ensemble].max_rates = nengo.dists.Choice([max_rates])
     net.config[nengo.Ensemble].intercepts = nengo.dists.Choice([intercepts])    
     neuron_type=nengo.LIF(amplitude=amp, tau_rc=tau_rc)
-    #nengo_dl.configure_settings(trainable=False)
-
     inp = nengo.Node([0] * 1)    
-    ens = nengo.Ensemble(1, 1, neuron_type=neuron_type) # max_rates=nengo.dists.Choice([max_rates]), intercepts=nengo.dists.Choice([intercepts]))
-    x = nengo.Connection(inp, ens.neurons, transform=nengo_dl.dists.Glorot(), synapse=None) #, transform=np.random.normal(0, 0.1, size=[1,1]))    
-    #x = nengo_dl.tensor_layer(inp, tf.layers.dense, units=1)
-    
+    ens = nengo.Ensemble(1, 1, neuron_type=neuron_type)
+    x = nengo.Connection(inp, ens.neurons, transform=nengo_dl.dists.Glorot(), synapse=None)
     inp_p = nengo.Probe(inp)
     out_p = nengo.Probe(x)
     out_p_filt = nengo.Probe(x, synapse=noise_filter)
@@ -63,3 +59,9 @@ sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
 sys.stdout = oldstdout
 print(sim.data[out_p_filt][-1][-1])
 sim.close()
+
+
+
+
+
+
