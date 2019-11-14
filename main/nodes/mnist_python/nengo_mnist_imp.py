@@ -7,7 +7,9 @@ class NullWriter (object):
         pass
     def flush(args):
         pass
-
+nullwrite = NullWriter()
+oldstdout = sys.stdout
+sys.stdout = nullwrite
 import nengo
 import nengo_dl
 import numpy as np
@@ -17,6 +19,32 @@ import gzip
 import pickle
 import zipfile
 from urllib.request import urlretrieve
+import random
+
+# String Data Parse
+sys.stdout = oldstdout
+select_number = int(sys.argv[2])
+parse = sys.argv[1].replace("\r", "")
+parse = parse.replace("\n", "")
+parse = parse.replace("[", "")
+parse = parse.replace("]", "")
+parse = parse.replace("0.", "#0.")
+parse = parse.replace("1.", "#1.")
+parse = parse.replace(" ", "")
+parse_list = parse.split("#")
+x_data = []
+y_data = []
+for i in range(1, len(parse_list)):
+    sd = parse_list[i]
+    fd = float(sd)
+    x_data.append(fd)
+x_data = np.array([x_data])
+for i in range(10):
+    if (i == select_number):
+        y_data.append(1.0)
+    else:
+        y_data.append(0.0)
+y_data = np.array([y_data])
 
 # neuron type
 amp = 0.01
@@ -31,19 +59,10 @@ epochs = 20
 learning_rate = 0.001
 
 #evaluation
-minibatch_size = 200
+minibatch_size = 1
 n_steps = 20
+#sys.stdout = nullwrite
 
-with gzip.open("nodes/mnist_python/mnist_train_data/mnist.pkl.gz") as f:
-    train_data, _, test_data = pickle.load(f, encoding="latin1")
-
-train_data = list(train_data)
-test_data = list(test_data)
-for data in [train_data, test_data]:
-    one_hot = np.zeros((data[0].shape[0], 10))
-    one_hot[np.arange(data[0].shape[0]), data[1]] = 1
-    data[1] = one_hot
-    
 with nengo.Network() as net:        
     neuron_type = nengo.LIF(amplitude=amp, tau_rc=tau_rc)
     net.config[nengo.Ensemble].max_rates = nengo.dists.Choice([max_rates])
@@ -70,28 +89,27 @@ with nengo.Network() as net:
     out_p_filt = nengo.Probe(layer, synapse=synapse)
 
 sim = nengo_dl.Simulator(net, minibatch_size=minibatch_size)
-
 test_data = {
-    inp: np.tile(test_data[0][:minibatch_size*1, None, :], (1, n_steps, 1)),
-    out_p_filt: np.tile(test_data[1][:minibatch_size*1, None, :],(1, n_steps, 1))
+    # (1, 784)
+    # (1, 10)
+    inp: np.tile(x_data, (1, n_steps, 1)),
+    out_p_filt: np.tile(y_data,(1, n_steps, 1))
 }
-
 # load parameters
 sim.load_params("nodes/mnist_python/mnist_train_data/mnist_params")
 
 #11
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
-for i in range(5):
-    plt.figure()
-    plt.subplot(1, 2, 1)
-    plt.imshow(np.reshape(test_data[inp][i, 0], (28, 28)),cmap="gray")
-    plt.axis('off')
-    plt.subplot(1, 2, 2)
-    plt.plot(sim.trange(), sim.data[out_p_filt][i])
-    plt.legend([str(i) for i in range(10)], loc="upper left")
-    plt.show()
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(np.reshape(test_data[inp][0, 0], (28, 28)),cmap="gray")
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.plot(sim.trange(), sim.data[out_p_filt][0])
+plt.legend([str(i) for i in range(10)], loc="upper left")
 
-
-
-
+for i in range(10):
+    print(str(i) + ":" + str(sim.data[out_p_filt][0][-1][i]))
+sys.stdout.flush()
+plt.show()
 

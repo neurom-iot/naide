@@ -3,9 +3,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, n);
         var node = this;
         var callPython = function(msg) {
-            const rand = msg.payload ** 2 % 7;
+            const rand = msg.payload ** 2 % 10000;
             const spawn = require("child_process").spawn;
-            
             const pythonProcess = spawn('python', ["nodes/mnist_python/nengo_mnist_data.py", rand]);
             pythonProcess.stdout.on('data', function(data) {
                 sendFunction(Buffer.from(data, 'utf-8').toString());
@@ -16,8 +15,7 @@ module.exports = function(RED) {
             console.log(data.toString());
             msg.payload = data.replace('\r\n', '').toString();
             split_data = data.split("|", 2);
-            msg.x_data = Number(split_data[0]);
-            msg.y_data = Number(split_data[1]);
+            msg.select_number = Number(split_data[0]);
             this.send(msg);
         };
         node.on('input', function(msg) {
