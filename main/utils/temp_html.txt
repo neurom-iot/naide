@@ -1,0 +1,30 @@
+<script type="text/x-red" data-template-name=<NODE_NAME>>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name=<NODE_NAME>>
+    <p><NODE_DESC></p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType(<NODE_NAME>,{
+        category: 'function',
+        color: '#999999',
+        defaults: {
+            name: {value: <NODE_NAME>}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name|| <NODE_NAME>;
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>
