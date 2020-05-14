@@ -30,8 +30,8 @@ If you want to run the latest code from git, here's how to get started:
 
 1. Clone the code:
 
-        git clone https://github.com/node-red/node-red.git
-        cd node-red
+        git clone https://github.com/neurom-iot/naide.git
+        cd naide/main
 
 2. Install the node-red dependencies
 
