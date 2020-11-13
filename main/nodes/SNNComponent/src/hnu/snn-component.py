@@ -27,12 +27,12 @@ with nengo.Network(seed=0) as net:
     
     inp = nengo.Node(np.zeros(28*28))  
 
-    layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=32, kernel_size=3)) (inp, shape_in=(28, 28, 1))
-    layer = nengo_dl.Layer(neuron_type)(layer)
-    layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=64, kernel_size=3, strides=2)) (layer, shape_in=(26, 26, 32))
-    layer = nengo_dl.Layer(neuron_type)(layer)
-    layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=128, kernel_size=3, strides=2)) (layer, shape_in=(12, 12, 64))
-    layer = nengo_dl.Layer(neuron_type)(layer)
+   layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=32, kernel_size=3)) (inp, shape_in=(28, 28, 1))
+   layer = nengo_dl.Layer(neuron_type)(layer)
+   layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=64, kernel_size=3, strides=2)) (layer, shape_in=(26, 26, 32))
+   layer = nengo_dl.Layer(neuron_type)(layer)
+   layer = nengo_dl.Layer(tf.keras.layers.Conv2D(filters=128, kernel_size=3, strides=2)) (layer, shape_in=(12, 12, 64))
+   layer = nengo_dl.Layer(neuron_type)(layer)
 
     out = nengo_dl.Layer(tf.keras.layers.Dense(units=10))(layer)
 
