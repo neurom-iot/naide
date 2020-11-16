@@ -44,13 +44,10 @@ function createNode(node){
         html = replaceNodeString(i, node, html);
         js = fs.readFileSync(__dirname + '/temp_js.txt').toString();
         js = replaceNodeString(i, node, js);
-        
         // js
         fs.writeFileSync(dir + e + ".js", js, {encoding : 'utf8'});
-        
         // html
         fs.writeFileSync(dir + e + '.html', html, {encoding : 'utf8'});
-        
     });
     // json
     json = JSON.stringify(node);
