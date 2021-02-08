@@ -1,0 +1,19 @@
+{
+  "name": "Segment7",
+  "version": "1.0.0",
+  "description": "hnu-iot-component",
+  "main": "index.js",
+  "scripts": {
+    "test": "iot-component"
+  },
+  "node-red": {
+    "nodes": {
+      "IoTComponent": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "Segment7"
+  ],
+  "author": "HNU",
+  "license": "UNLICENSED"
+}

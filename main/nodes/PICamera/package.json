@@ -1,0 +1,19 @@
+{
+  "name": "PICamera",
+  "version": "1.0.0",
+  "description": "hci_snn-mnist-print-picamera",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-nengo-fpga-picamera"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-nengo-fpga-picamera": "snn-nengo-fpga-picamera.js"
+    }
+  },
+  "keywords": [
+    "PICamera"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}

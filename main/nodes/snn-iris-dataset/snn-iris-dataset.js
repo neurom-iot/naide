@@ -1,6 +1,11 @@
 module.exports = function(RED) {
     function SNN_IRIS_Dataset(n) {
         RED.nodes.createNode(this, n);
+        var textEditor = RED.NAIDE.textEditor.init(this, {
+            codeText: n.codeText,
+            callbackFunc: function(c){}
+        });
+        /*
         var node = this;
         var callPython = function(msg) {
             const rand = msg.payload ** 2 % 7;
@@ -20,9 +25,11 @@ module.exports = function(RED) {
             msg.y_data = Number(split_data[1]);
             this.send(msg);
         };
-        node.on('input', function(msg) {
-            console.log(msg);
-            callPython(msg);
+        */
+        this.on('input', function(msg, send, done) {
+            //console.log(msg);
+            //callPython(msg);
+            textEditor.run(msg, send, done);
         });
         
     }

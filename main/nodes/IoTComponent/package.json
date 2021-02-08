@@ -1,0 +1,19 @@
+{
+  "name": "iot-component",
+  "version": "1.0.0",
+  "description": "hnu-iot-component",
+  "main": "index.js",
+  "scripts": {
+    "test": "iot-component"
+  },
+  "node-red": {
+    "nodes": {
+      "IoTComponent": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "hnu-iot"
+  ],
+  "author": "HNU",
+  "license": "UNLICENSED"
+}

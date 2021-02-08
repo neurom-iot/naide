@@ -1,0 +1,19 @@
+{
+  "name": "NengoFPGA",
+  "version": "1.0.0",
+  "description": "hnu_snn-nengo-fpga",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-nengo-fpga"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-nengo-fpga": "snn-nengo-fpga.js"
+    }
+  },
+  "keywords": [
+    "NengoFPGA"
+  ],
+  "author": "HNU",
+  "license": "UNLICENSED"
+}

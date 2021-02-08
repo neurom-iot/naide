@@ -1,0 +1,19 @@
+{
+  "name": "SNNComponent",
+  "version": "1.0.0",
+  "description": "This is description.",
+  "main": "index.js",
+  "scripts": {
+    "test": "SNNComponent"
+  },
+  "node-red": {
+    "nodes": {
+      "SNNComponent": "src/hnu/snn-component.js"
+    }
+  },
+  "keywords": [
+    "snn"
+  ],
+  "author": "SeoyeonKim",
+  "license": "UNLICENSED"
+}

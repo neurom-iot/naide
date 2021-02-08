@@ -1,0 +1,21 @@
+{
+    "name": "prosim",
+    "version": "1.0.0",
+    "description": "hci_sim_component",
+    "main": "sim.js",
+    "scripts": {
+      "test": "sim"
+    },
+    "node-red": {
+      "nodes": {
+        "probe": "sim.js"
+      }
+    },
+    "keywords": [
+      "sim"
+    ],
+    "author": "HCI",
+    "license": "UNLICENSED"
+  }
+  
+  

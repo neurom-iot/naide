@@ -22,7 +22,7 @@ from urllib.request import urlretrieve
 import random
 
 # String Data Parse
-sys.stdout = oldstdout
+
 select_number = int(sys.argv[2])
 parse = sys.argv[1].replace("\r", "")
 parse = parse.replace("\n", "")
@@ -88,6 +88,7 @@ test_data = {
 }
 sim.load_params("nodes/mnist_python/mnist_train_data/mnist_params")
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
+sys.stdout = oldstdout
 for i in range(10):
     print(str(i) + ":" + str(sim.data[out_p_filt][0][-1][i]))
 sys.stdout.flush()

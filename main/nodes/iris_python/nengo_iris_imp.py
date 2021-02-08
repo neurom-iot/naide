@@ -58,7 +58,22 @@ test_data = {
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
 sys.stdout = oldstdout
 print(sim.data[out_p_filt][-1][-1])
+sys.stdout.flush()
+try:
+    plt.figure()
+    plt.subplot(1, 2, 1)
+    plt.text(0, 0.8, f"sepal width : {input_x}")
+    plt.text(0, 0.7, f"petal width : {res_y}")
+    plt.text(0, 0.5, f"result width : {sim.data[out_p_filt][-1][-1]}")
+    plt.axis('off')
+    plt.subplot(1, 2, 2)
+    plt.plot(sim.trange(), sim.data[out_p_filt][0])
+    #plt.legend([str(i) for i in range(10)], loc="upper left")
+    plt.show()
+except Exception as e:
+    print(e)
 sim.close()
+
 
 
 

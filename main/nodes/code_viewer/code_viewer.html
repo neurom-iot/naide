@@ -9,30 +9,21 @@
         <input type="hidden" id="node-input-func" autofocus="autofocus">
         <input type="hidden" id="node-input-noerr">
     </div>
-    <div class="form-row node-text-editor-row" style="position:relative">
-        <div style="position: absolute; right:0; bottom:calc(100% + 3px);"><button id="node-function-expand-js" class="red-ui-button red-ui-button-small"><i class="fa fa-expand"></i></button></div>
-        <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-code-editor" ></div>
-    </div>
 </script>
 
 <script type="text/x-red" data-help-name="code_viewer">
     <p>"hci code_viewer node"</p>
 </script>
 
+
 <script type="text/javascript">
     RED.nodes.registerType("code_viewer",{
         category: 'NAIDE',
+        codeEditable: true,
         color: '#959595',
         defaults: {
             name: {value: "code_viewer"},
-            codeText: {value:   'var filename = "test.py";\n'+
-                                'var arg = msg.payload;\n'+
-                                'var callbackFunc = function(data) {\n'+
-                                '    msg.payload = data;\n'+
-                                '    node.send(msg);\n'+
-                                '};\n'+
-                                'callPython(callbackFunc, filename, arg);'
-            } 
+            codeText: {value: 'return "hello World!";'}
         },
         inputs:1,
         outputs:1,
@@ -40,40 +31,12 @@
         label: function() {
             return this.name|| "code_viewer";
         },
-        oneditprepare: function() {
-            var that = this;
-            this.editor = RED.editor.createEditor({
-                id: 'node-input-code-editor',
-                mode: 'ace/mode/nrjavascript',
-                value: this.codeText
-            });
-            RED.popover.tooltip($("#node-function-expand-js"), "코드창 확대");
-            $("#node-function-expand-js").on("click", function(e) {
-                e.preventDefault();
-                var value = that.editor.getValue();
-                RED.editor.editJavaScript({
-                    value: value,
-                    width: "Infinity",
-                    cursor: that.editor.getCursorPosition(),
-                    mode: "ace/mode/nrjavascript",
-                    complete: function(v,cursor) {
-                        that.editor.setValue(v, -1);
-                        that.editor.gotoLine(cursor.row+1,cursor.column,false);
-                        setTimeout(function() {
-                            that.editor.focus();
-                        },300);
-                    }
-                })
-            });
+        oneditprepare: function () {
+            
         },
-        oneditsave: function() {
-            this.codeText = this.editor.getValue();
-            this.editor.destroy();
-            delete this.editor;
+        oneditsave: function () {
         },
         oneditcancel: function() {
-            this.editor.destroy();
-            delete this.editor;
         }
     });
-</script>``
+</script>

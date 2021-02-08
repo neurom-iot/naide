@@ -41,6 +41,7 @@
             pulse: {value: 0},
             hz: {value: 1000}
         },
+        codeEditable: true,
         inputs:0,
         outputs:1,
         icon: "file.png",
@@ -66,13 +67,9 @@
         oneditsave: function() {
             var pluseValue = $(".pulse-button-group.selected").text();
             var hzValue = $(".hz-button-group.selected").text();
-            console.log(pluseValue);
-            console.log(hzValue);
             this.payloadType = pluseValue;
             this.pulse = pluseValue == "교차" ? 0 : 1;
             this.hz = hzValue == "1Hz" ? 1000 : hzValue == "10Hz" ? 100 : hzValue == "100Hz" ? 10 : 1;
-            console.log(this.pulse);
-            console.log(this.hz);
         },
         button: {
             enabled: function() {
