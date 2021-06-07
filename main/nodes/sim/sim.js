@@ -99,8 +99,8 @@ module.exports = function(RED) {
 
         //object (topic + msg + payload)
         this.on('input', function(msg, send, done){
-            if(msg.testlabel == 'snn'){
-                console.log('hihi');
+            if(typeof(msg.payload.sim) === "undefined"){
+                return;
             }
             else{
                 if (this.complete === "true") {

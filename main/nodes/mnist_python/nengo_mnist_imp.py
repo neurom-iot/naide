@@ -7,9 +7,9 @@ class NullWriter (object):
         pass
     def flush(args):
         pass
-nullwrite = NullWriter()
-oldstdout = sys.stdout
-sys.stdout = nullwrite
+#nullwrite = NullWriter()
+#oldstdout = sys.stdout
+#sys.stdout = nullwrite
 import nengo
 import nengo_dl
 import numpy as np
@@ -20,11 +20,13 @@ import pickle
 import zipfile
 from urllib.request import urlretrieve
 import random
+import json
 
 # String Data Parse
-
 select_number = int(sys.argv[2])
-parse = sys.argv[1].replace("\r", "")
+data_arg = sys.argv[1]
+
+parse = data_arg.replace("\r", "")
 parse = parse.replace("\n", "")
 parse = parse.replace("[", "")
 parse = parse.replace("]", "")
@@ -88,10 +90,21 @@ test_data = {
 }
 sim.load_params("nodes/mnist_python/mnist_train_data/mnist_params")
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
-sys.stdout = oldstdout
-for i in range(10):
-    print(str(i) + ":" + str(sim.data[out_p_filt][0][-1][i]))
 sys.stdout.flush()
+#sys.stdout = oldstdout
+try:
+    output = {}
+    output["last"] = sim.data[out_p_filt][0][-1].tolist()
+    output["data"] = sim.data[out_p_filt][0].tolist()
+    output["trange"] = sim.trange().tolist()
+    output["sim"] = "true"
+    jstr = json.dumps(output)
+    print("sim:"+jstr)
+    sys.stdout.flush()
+except Exception as e:
+    print(e)
+finally:
+    sys.stdout.flush()
 
 
 plt.figure()

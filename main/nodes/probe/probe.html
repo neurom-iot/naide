@@ -142,7 +142,7 @@
             },
 
             onpaletteremove: function () {
-                RED.sidebar.removeTab("sidebar-nasimulator2");
+                RED.sidebar.removeTab("sidebar-naprobe");
                 RED.events.off("sidebar:resize", sidebarResizeEventHandler);
             },
             onpaletteadd: function () {
@@ -183,9 +183,9 @@
                 // Add a new "Na-sim" tabsheet to the sidebar in the flow editor
                 var sidebar_t = null
                 sidebar_t = RED.sidebar.addTab({
-                    id: "sidebar-nasimulator2",
-                    label: "NA-Simulator",
-                    name: "NA-Simulator",
+                    id: "sidebar-naprobe",
+                    label: "NA-Probe",
+                    name: "NA-Probe",
                     content: probe.content,
                     closeable: true,
                     disableOnEdit: true,

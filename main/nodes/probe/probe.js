@@ -129,7 +129,6 @@ module.exports = function(RED) {
                     node.log("\n"+util.inspect(msg, {colors:useColors, depth:10}));
                 }
                 if (this.active && this.tosidebar) {
-                    console.log("1");
                     sendDebug({id:node.id, z:node.z, name:node.name, topic:msg.topic, msg:msg, _path:msg._path});
                 }
                 done();
@@ -141,7 +140,6 @@ module.exports = function(RED) {
                         node.log("\n"+util.inspect(msg, {colors:useColors, depth:10}));
                     }
                     if (this.active && this.tosidebar) {
-                        console.log("1");
                         sendDebug({id:node.id, z:node.z, name:node.name, topic:msg.topic, msg:msg, _path:msg._path});
                     }
                     done();
@@ -169,7 +167,6 @@ module.exports = function(RED) {
                         }
                         if (node.active) {
                             if (node.tosidebar == true) {
-                                console.log("2");
                                 sendDebug(debugMsg);
                             }
                         }

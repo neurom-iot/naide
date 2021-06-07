@@ -1,26 +1,44 @@
 <!-- YOUR FIRST DATA TEMPLATE TO DISPLAY THE CONFIG SCREEN WHEN THE CONFIG NODE IS DISPLAYED -->
 <script type="text/x-red" data-template-name="sim">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-tags"></i> 이름</label>
         <input type="text" id="node-input-name" placeholder="Name">
-        <br/>
-        <label for="node-input-name"><i class="icon-tag"></i> Time</label>
-        <input type="text" id="node-input-time" placeholder="Time">
     </div>
 
     <div class="form-row">
-        <label><i class="fa fa-object-group"></i> Size</label>
-        <input type="hidden" id="node-input-width">
-        <input type="hidden" id="node-input-height">
-        <button class="editor-button" id="node-input-size"></button>
+        <label for="node-input-name"><i class="fas fa-history"></i> 시간 설정</label>
+        <input type="text" id="sim-start-time-input" style="width:100px;" placeholder="ms"> ~
+        <input type="text" id="sim-end-time-input" style="width:100px;" placeholder="ms">
     </div>
- 
+
     <div class="form-row">
-        <label for="node-input-outs"><i class="fa fa-sign-out"></i> Output</label>
+        <label for="node-input-outs"><i class="fa fa-sign-out"></i> 그래프</label>
         <select id="node-input-outs" style="width:204px">
-            <option value="all">continuously while Simulator</option>
-            <option value="end">only on release</option>
+            <option value="all">선형</option>
+            <option value="end">원형</option>
+            <option value="end">막대형</option>
         </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outs"><i class="fa fa-file"></i> 출력파일</label>
+        <select id="node-input-outs" style="width:100px">
+            <option value="all">json</option>
+            <option value="end">npz</option>
+            <option value="end">string</option>
+        </select>
+    </div>
+
+    <div class="form-tips">
+        <b>주석:</b>
+        <br>
+        [시간 설정]
+        <br>
+        범위는 ms(밀리초) 단위를 사용합니다. 최대 범위로 설정할 경우 0 ~ 0 범위로 설정하면 됩니다.
+        <br>
+        [그래프]
+        <br>
+        Simulator 탭에 표시될 그래프의 종류를 설정합니다.
     </div>
 
 </script>
@@ -31,6 +49,10 @@
         저장 및 입출력 지원 </p>
 </script>
 
+<!-- d3.js -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<!-- chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="naide/sim/simulator-utils.js"></script>
 
 <script type="text/javascript">
@@ -66,14 +88,16 @@
             },
 
             oneditprepare: function () {
-                $("#node-input-size").elementSizer({
-                width:"#node-input-width",
-                height:"#node-input-height",
-                group:"#node-input-group"
-            });
-            if(!$("#node-input-outs").val()){
-                $("#node-input-outs").val("all")
-              }
+                $("#sim-start-time-input").typedInput({
+                    type: "num",
+                    types: ["num"],
+                });
+                console.log("!");
+                $("#sim-end-time-input").typedInput({
+                    type: "num",
+                    types: ["num"]
+                });
+                console.log("!");
             },
 
             oneditsave: function () {
@@ -116,8 +140,8 @@
                 var uiComponents = RED.NAIDE.simulator.init(options);
                 RED.sidebar.addTab({
                     id: "sidebar-nasimulator",
-                    label: "NA-Simulator_label",
-                    name: "NA-Simulator_name",
+                    label: "NA-Simulator",
+                    name: "NA-Simulator",
                     content: uiComponents.content,
                     //toolbar: uiComponents.footer,
                     closeable: true,

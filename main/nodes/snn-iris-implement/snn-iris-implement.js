@@ -11,7 +11,6 @@ module.exports = function(RED) {
         }
         var sendFunction = (msg, data) => {
             console.log(data.toString());
-            msg.payload = data.replace('\r\n', '').toString();
             msg.implement = parseFloat(msg.payload.replace('[', '').replace(']', ''));
             msg.err_rate = msg.y_data - msg.implement;
             this.send(msg);

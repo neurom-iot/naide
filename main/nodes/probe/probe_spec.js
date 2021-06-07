@@ -141,7 +141,7 @@ RED.probe = (function() {
             console.log("TODO: i18n library support");
         }
 
-        toolbar.find('#red-ui-sidebar-probe-filter span').text(RED._('node-red:probe.sidebar.filterAll'));
+        toolbar.find('#red-ui-sidebar-probe-filter span').text("Filter");
 
         var filterButtonHandler = function(type) {
             return function(e) {
@@ -399,11 +399,21 @@ RED.probe = (function() {
     }
 
     function processprobeMessage(o) {
-        var msg = $("<div/>");
+        /*
+        var msg = $("<span/>");
+        var text = $("<p style='color:#000000;'/>")
+        var content = $(".red-ui-probe-content-list");
+        var data = JSON.parse(o.msg);
+        msg.attr('id', "probe-msg " + o.id);
+        text.text(data.payload);
+        msg.append(text);
+        content.prepend($("<hr>"));
+        content.prepend(msg);
+        */
         var sourceNode = o._source;
-
+        var msg = $("<div/>");
         msg.on("mouseenter", function() {
-            msg.addClass('red-ui-probe-msg-hover');
+            msg.addClass('red-ui-debug-msg-hover');
             if (o._source) {
                 config.messageMouseEnter(o._source.id);
                 if (o._source._alias) {
@@ -412,7 +422,7 @@ RED.probe = (function() {
             }
         });
         msg.on("mouseleave", function() {
-            msg.removeClass('red-ui-probe-msg-hover');
+            msg.removeClass('red-ui-debug-msg-hover');
             if (o._source) {
                 config.messageMouseLeave(o._source.id);
                 if (o._source._alias) {
@@ -425,10 +435,10 @@ RED.probe = (function() {
         var property = sanitize(o.property?o.property:'');
         var payload = o.msg;
         var format = sanitize((o.format||"").toString());
-        msg.attr("class", 'red-ui-probe-msg'+(o.level?(' red-ui-probe-msg-level-'+o.level):'')+
+        msg.attr("class", 'red-ui-debug-msg'+(o.level?(' red-ui-debug-msg-level-'+o.level):'')+
             (sourceNode?(
-                " red-ui-probe-msg-node-"+sourceNode.id.replace(/\./g,"_")+
-                (sourceNode.z?" red-ui-probe-msg-flow-"+sourceNode.z.replace(/\./g,"_"):"")
+                " red-ui-debug-msg-node-"+sourceNode.id.replace(/\./g,"_")+
+                (sourceNode.z?" red-ui-debug-msg-flow-"+sourceNode.z.replace(/\./g,"_"):"")
             ):""));
 
         if (sourceNode) {
@@ -444,25 +454,25 @@ RED.probe = (function() {
             }
         }
 
-        var metaRow = $('<div class="red-ui-probe-msg-meta"></div>').appendTo(msg);
-        $('<span class="red-ui-probe-msg-date">'+ getTimestamp()+'</span>').appendTo(metaRow);
+        var metaRow = $('<div class="red-ui-debug-msg-meta"></div>').appendTo(msg);
+        $('<span class="red-ui-debug-msg-date">'+ getTimestamp()+'</span>').appendTo(metaRow);
         if (sourceNode) {
-            $('<a>',{href:"#",class:"red-ui-probe-msg-name"}).text('node: '+sanitize(o.name||sourceNode.name||sourceNode.id))
+            $('<a>',{href:"#",class:"red-ui-debug-msg-name"}).text('component: '+sanitize(o.name||sourceNode.name||sourceNode.id))
             .appendTo(metaRow)
             .on("click", function(evt) {
                 evt.preventDefault();
                 config.messageSourceClick(sourceNode.id);
             });
         } else if (name) {
-            $('<span class="red-ui-probe-msg-name">'+name+'</span>').appendTo(metaRow);
+            $('<span class="red-ui-debug-msg-name">'+name+'</span>').appendTo(metaRow);
         }
 
         payload = RED.utils.decodeObject(payload,format);
 
-        var el = $('<span class="red-ui-probe-msg-payload"></span>').appendTo(msg);
+        var el = $('<span class="red-ui-debug-msg-payload"></span>').appendTo(msg);
         var path = o.property||'';
         var probeMessage = RED.utils.createObjectElement(payload, {
-            key: /*true*/null,
+            key: null,//true,
             typeHint: format,
             hideKey: false,
             path: path,
@@ -479,17 +489,17 @@ RED.probe = (function() {
                 errorLvl = 30;
                 errorLvlType = 'warn';
             }
-            msg.addClass('red-ui-probe-msg-level-' + errorLvl);
-            $('<span class="red-ui-probe-msg-topic">function : (' + errorLvlType + ')</span>').appendTo(metaRow);
+            msg.addClass('red-ui-debug-msg-level-' + errorLvl);
+            $('<span class="red-ui-debug-msg-topic">function : (' + errorLvlType + ')</span>').appendTo(metaRow);
         } else {
-            var tools = $('<span class="red-ui-probe-msg-tools button-group"></span>').appendTo(metaRow);
+            var tools = $('<span class="red-ui-debug-msg-tools button-group"></span>').appendTo(metaRow);
             var filterMessage = $('<button class="red-ui-button red-ui-button-small"><i class="fa fa-caret-down"></i></button>').appendTo(tools);
             filterMessage.on("click", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 showMessageMenu(filterMessage,probeMessage,sourceNode&&sourceNode.id);
             });
-            $('<span class="red-ui-probe-msg-topic">'+
+            $('<span class="red-ui-debug-msg-topic">'+
                 (o.topic?topic+' : ':'')+
                 (o.property?'msg.'+property:'msg')+" : "+format+
                 '</span>').appendTo(metaRow);
@@ -505,15 +515,15 @@ RED.probe = (function() {
             messagesByNode[sourceNode.id] = m;
         }
         if (view == "list") {
-            messageList.append(msg);
+            messageList.prepend(msg);
         } else {
             if (sourceNode) {
-                var wrapper = $("#red-ui-probe-msg-source-"+sourceNode.id.replace(/\./g,"_"));
+                var wrapper = $("#red-ui-debug-msg-source-"+sourceNode.id.replace(/\./g,"_"));
                 if (wrapper.length === 0 ) {
-                    wrapper = $("<div>",{id:"red-ui-probe-msg-source-"+sourceNode.id.replace(/\./g,"_")}).appendTo(messageTable);
+                    wrapper = $("<div>",{id:"red-ui-debug-msg-source-"+sourceNode.id.replace(/\./g,"_")}).appendTo(messageTable);
                 }
                 wrapper.empty();
-                wrapper.append(msg);
+                wrapper.prepend(msg);
             }
         }
 
@@ -542,7 +552,7 @@ RED.probe = (function() {
         filterType = 'filterAll';
         $('.red-ui-sidebar-probe-filter-option').removeClass('selected');
         $('#red-ui-sidebar-probe-filterAll').addClass('selected');
-        $('#red-ui-sidebar-probe-filter span').text(RED._('node-red:probe.sidebar.filterAll'));
+        $('#red-ui-sidebar-probe-filter span').text("Filter");
         $('#red-ui-sidebar-probe-filter-node-list-row').slideUp();
     }
 
