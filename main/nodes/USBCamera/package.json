@@ -1,0 +1,19 @@
+{
+  "name": "USBCamera",
+  "version": "1.0.0",
+  "description": "hci_snn-mnist-print-picamera",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-nengo-fpga-usbcamera"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-nengo-fpga-usbcamera": "snn-nengo-fpga-usbcamera.js"
+    }
+  },
+  "keywords": [
+    "USBCamera"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
