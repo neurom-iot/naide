@@ -12,6 +12,7 @@ import numpy as np
 import random
 from sklearn import datasets
 
+
 nullwrite = NullWriter()
 oldstdout = sys.stdout
 sys.stdout = nullwrite

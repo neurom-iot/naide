@@ -1,1 +1,17 @@
-{"name":"code_viewer","version":"1.0.0","description":"hci code_viewer node","main":"index.js","keywords":["code_viewer"],"author":"HCI","license":"UNLICENSED","node-red":{"nodes":{"code_viewer":"code_viewer.js"}}}
+{
+  "name": "code_viewer",
+  "version": "1.0.0",
+  "description": "hci code_viewer node",
+  "main": "index.js",
+  "keywords": [
+    "code_viewer"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED",
+  "node-red": {
+    "nodes": {
+      "code_viewer": "code_viewer.js"
+    }
+  },
+  "dependencies": {}
+}

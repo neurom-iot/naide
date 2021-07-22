@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import random
 import nengo
 import nengo_dl
+import json
 
 # Recv. Input dataset
 data = sys.argv[1].split('|')
@@ -59,6 +60,20 @@ sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
 sys.stdout = oldstdout
 print(sim.data[out_p_filt][-1][-1])
 sys.stdout.flush()
+try:
+    output = {}
+    output["last"] = sim.data[out_p_filt][0][-1].tolist()
+    output["data"] = sim.data[out_p_filt][0].tolist()
+    output["trange"] = sim.trange().tolist()
+    output["sim"] = "true"
+    jstr = json.dumps(output)
+    print("sim:"+jstr)
+    sys.stdout.flush()
+except Exception as e:
+    print(e)
+finally:
+    sys.stdout.flush()
+    
 try:
     plt.figure()
     plt.subplot(1, 2, 1)

@@ -34,6 +34,7 @@ module.exports = function(RED) {
                 top_rate_number:top_rate_number,
                 number_rate:number_rate
             }
+            console.log(json);
             debug = parseJson(json);
             pkgmgr = "";
             msg.payload = debug;

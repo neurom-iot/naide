@@ -1,0 +1,20 @@
+{
+  "name": "snn-lowbirth-dataset",
+  "version": "1.0.0",
+  "description": "hci_snn-lowbirth-dataset",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-lowbirth-dataset"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-lowbirth-dataset": "snn-lowbirth-dataset.js"
+    }
+  },
+  "keywords": [
+    "snn-lowbirth-dataset"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
+
