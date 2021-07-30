@@ -1,0 +1,22 @@
+{
+  "name": "snn-iris-component",
+  "version": "1.0.0",
+  "description": "hci_snn-iris",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-iris-component"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-iris-dataset": "snn-iris-dataset.js",
+      "snn-iris-implement": "snn-iris-implement.js",
+      "snn-iris-print": "snn-iris-print.js"
+    }
+  },
+  "keywords": [
+    "snn-iris-component"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
+
