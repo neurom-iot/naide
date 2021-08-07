@@ -4,7 +4,7 @@
 # https://www.nengo.ai/nengo-fpga/getting_started.html#fpga-board
 
 # # Example host (PC) configuration
-# [host]
+[host]
 ip = 192.168.0.3
 
 # # Example DE1 FPGA board configuration

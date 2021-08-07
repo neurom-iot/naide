@@ -1,16 +1,16 @@
 module.exports = function(RED) {
-    function USBCamera(config) {
+    function LED_pi_nano(config) {
        RED.nodes.createNode(this, config);
         var component = this;
         var callPython = function(msg) {
         const data = msg.payload;
-//npm install sudo-js --save ÇÊ¿ä
-            const sudo = require('sudo-js');
-            sudo.setPassword('1234');//board password 
-            sudo.exec(["python3",`${__dirname}/iot-component.py`,data],function(err,pid,data){
-                sendFunction(Buffer.from(data, 'uft-8').toString());
+//rspi && jetson nano && panda
+            const spawn = require("child_process").spawn;
+            const pythonProcess = spawn('python3',["na-components/LED_pi_nano/src/hnu/iot-component.py",data]);
+            pythonProcess.stdout.on('data', function(data) {
+                sendFunction(Buffer.from(data, 'utf-8').toString());
             });
-           };
+        };
         var sendFunction = (data) => {
                 var msg = {};
                 msg.payload = data.replace('\r\n', '').toString();
@@ -22,5 +22,5 @@ module.exports = function(RED) {
             callPython(msg);
         });
     }
-    RED.nodes.registerType("USBCamera",USBCamera);
+    RED.nodes.registerType("LED_pi_nano",LED_pi_nano);
 }

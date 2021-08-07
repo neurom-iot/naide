@@ -2,9 +2,9 @@ import os
 import sys
 import numpy as np
 import nengo
-import logging
 import gzip
 import pickle
+import zipfile
 from PIL import Image
 from nengo_extras.data import load_mnist
 from nengo_extras.vision import Gabor, Mask
@@ -40,23 +40,23 @@ def result_data(data):
        result.append(np.argmax(data[i]))
     result.remove(0)
     result = np.bincount(result)
-    #print(result)
+    print(result)
     return result
 try:
-    im_resize = sys.argv[1]
-    im_resize = im_resize.replace("]","")
-    im_resize = im_resize.replace("[","")
-    im_resize = im_resize.split()
-    im_resize = np.array(im_resize)
-    im_resize = im_resize.astype('int32')
-    im_resize = np.resize(im_resize,(1,196))
-    im_resize = im_resize / 256.0
+    #im_resize = sys.argv[1]
+    #im_resize = im_resize.replace("]","")
+    #im_resize = im_resize.replace("[","")
+    #im_resize = im_resize.split()
+    #im_resize = np.array(im_resize)
+    #im_resize = im_resize.astype('int32')
+    #im_resize = np.resize(im_resize,(1,196))
+    #im_resize = im_resize / 256.0
     epoc = 10
     neuronSize = 1.0
     board = "de1"
     logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
     rng = np.random.RandomState(9)
-    with gzip.open("na-components/nengo-fpga/NeromorphicBoard/src/hnu/mnist.pkl.gz") as f:
+    with gzip.open("nodes/mnist_python/mnist_train_data/mnist.pkl.gz") as f:
         train_data, _, test_data = pickle.load(f, encoding="latin1")
     train_data = list(train_data)
     test_data = list(test_data)
@@ -101,7 +101,7 @@ try:
 
     with nengo.Network(seed=3) as model:
         input_node = nengo.Node(
-            nengo.processes.PresentInput(im_resize, presentation_time), label="input"
+            nengo.processes.PresentInput(x_test, presentation_time), label="input"
         )
         ens = FpgaPesEnsembleNetwork(
             board,
@@ -132,7 +132,6 @@ try:
     data = sim.data[p2]
     sys.stdout = oldstdout
     result = result_data(data)
-    result = result.argmax()
     print(result)
     sys.stdout.flush()
     plt.figure()

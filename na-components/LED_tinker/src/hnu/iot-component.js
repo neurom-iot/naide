@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-    function USBCamera(config) {
+    function LED_tinker(config) {
        RED.nodes.createNode(this, config);
         var component = this;
         var callPython = function(msg) {
@@ -22,5 +22,5 @@ module.exports = function(RED) {
             callPython(msg);
         });
     }
-    RED.nodes.registerType("USBCamera",USBCamera);
+    RED.nodes.registerType("LED_tinker",LED_tinker);
 }
