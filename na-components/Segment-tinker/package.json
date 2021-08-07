@@ -1,0 +1,19 @@
+{
+  "name": "Segment-tinker",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "Segment-tinker"
+  },
+  "node-red": {
+    "nodes": {
+      "Segment-tinker": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}
