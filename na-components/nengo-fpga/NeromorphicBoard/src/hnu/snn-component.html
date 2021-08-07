@@ -1,0 +1,30 @@
+<script type="text/x-red" data-template-name="SNNComponent">
+    <div class="form-row">
+        <label for="component-input-name"><i class="icon-tag"></i> name</label>
+        <input type="text" id="component-input-name" placeholder="input name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="SNNComponent">
+    <p>%DESCRIPTION%</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('SNNComponent',{
+        category: 'Neuromorphic',
+        color: '#999999',
+        defaults: {
+            name: {value: ""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"SNNComponent";
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>

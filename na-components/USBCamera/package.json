@@ -1,0 +1,19 @@
+{
+  "name": "USBCamera",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "USBCamera"
+  },
+  "node-red": {
+    "nodes": {
+      "USBCamera": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}

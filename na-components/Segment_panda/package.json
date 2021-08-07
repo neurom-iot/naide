@@ -1,0 +1,19 @@
+{
+  "name": "Segment_panda",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "Segment_panda"
+  },
+  "node-red": {
+    "nodes": {
+      "Segment_panda": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}
