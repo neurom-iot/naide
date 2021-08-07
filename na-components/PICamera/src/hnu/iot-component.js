@@ -29,6 +29,6 @@ module.exports = function(RED) {
         component.on('input', function(msg) {
             callPython(msg);
         });
-    };
+    }
     RED.nodes.registerType("PICamera",PICamera);
 }

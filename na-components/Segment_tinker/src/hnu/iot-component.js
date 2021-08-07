@@ -8,7 +8,7 @@ module.exports = function(RED) {
             const sudo = require('sudo-js');
             sudo.setPassword('1234');//board password 
             sudo.exec(["python3",`${__dirname}/iot-component.py`,data],function(err,pid,data){
-                sendFunction(Buffer.from(data, 'uft-8').toString());
+                sendFunction(Buffer.from(data, 'utf-8').toString());
             });
            };
         var sendFunction = (data) => {

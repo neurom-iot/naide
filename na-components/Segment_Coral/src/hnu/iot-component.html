@@ -1,16 +1,16 @@
-<script type="text/x-red" data-template-name="Segment_Coral">
+<script type="text/x-red" data-template-name="Segment_coral">
     <div class="form-row">
         <label for="component-input-name"><i class="icon-tag"></i> name</label>
         <input type="text" id="component-input-name" placeholder="input name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="Segment_Coral">
+<script type="text/x-red" data-help-name="Segment_coral">
     <p>%DESCRIPTION%</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('Segment_Coral',{
+    RED.nodes.registerType('Segment_coral',{
         category: 'IoT',
         color: '#999999',
         defaults: {
@@ -20,7 +20,7 @@
         outputs:1,
         icon: "file.png",
         label: function() {
-            return this.name||"Segment_Coral";
+            return this.name||"Segment_coral";
         },
         oneditprepare: function() {
         },

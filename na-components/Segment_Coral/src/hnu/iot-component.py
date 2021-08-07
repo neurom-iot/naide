@@ -78,6 +78,7 @@ GPIO8 = 141
 GPIO8 = GPIO(GPIO8, "out")
 index = sys.argv[1]
 index = index.replace("\n","")
+index = int(index)
 print("result: ",index)
 sys.stdout.flush()
 segments = (GPIO1,GPIO2,GPIO3,GPIO4,GPIO5,GPIO6,GPIO7,GPIO8)

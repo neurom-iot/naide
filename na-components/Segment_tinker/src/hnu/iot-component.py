@@ -8,12 +8,13 @@ GPIO1 = 165
 GPIO2 = 168
 GPIO3 = 238
 GPIO4 = 185
-GPIO5 = 0
+GPIO5 = 224
 GPIO6 = 223
 GPIO7 = 187
 GPIO8 = 188
 index = sys.argv[1]
 index = index.replace("\n","")
+index = int(index)
 print("result: ",index)
 sys.stdout.flush()
 segments = (GPIO1,GPIO2,GPIO3,GPIO4,GPIO5,GPIO6,GPIO7,GPIO8)
