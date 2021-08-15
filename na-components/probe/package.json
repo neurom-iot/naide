@@ -1,0 +1,21 @@
+{
+    "name": "probe",
+    "version": "1.0.0",
+    "description": "hci_probe_component",
+    "main": "probe.js",
+    "scripts": {
+      "test": "probe"
+    },
+    "node-red": {
+      "nodes": {
+        "probe": "probe.js"
+      }
+    },
+    "keywords": [
+      "probe"
+    ],
+    "author": "HCI",
+    "license": "UNLICENSED"
+  }
+  
+  

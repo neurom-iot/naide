@@ -1,8 +1,7 @@
 module.exports = function(RED) {
-    function SNN_Lowbirth_Print(n) {
+    function SNN_MNIST_Print(n) {
         RED.nodes.createNode(this, n);
         var node = this;
-
         var parseJson = (json, level=0) => {
             res = "";
             for(data in json) {
@@ -47,10 +46,18 @@ module.exports = function(RED) {
             }
             this.send(msg);
         };
+        codeEditor = RED.NAIDE.codeEditor.init(this, {
+            codeText: n.codeText,
+            callbackFunc: function(c){
+                //sendFunction(c.msg);
+            }
+        })
         node.on('input', function(msg, send, done) {
-            sendFunction(msg);
+            console.log(msg);
+            
+            codeEditor.run(msg, send, done);
         });
         
     }
-    RED.nodes.registerType("snn-lowbirth-print", SNN_Lowbirth_Print);
+    RED.nodes.registerType("snn-mnist-print", SNN_MNIST_Print);
 }
