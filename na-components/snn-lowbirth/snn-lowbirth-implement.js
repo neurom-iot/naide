@@ -10,10 +10,9 @@ module.exports = function(RED) {
             });
         }
         var sendFunction = (msg, data) => {
-            console.log(data);
             if (data.includes("sim:")) {
                 parse = data.replace('sim:', '').replace('\r\n', '').toString();
-                msg.payload = JSON.parse(parse);
+                msg.sim_result = JSON.parse(parse);
             }
             else {
                 msg.payload = data;

@@ -12,8 +12,7 @@ module.exports = function(RED) {
         var sendFunction = (msg, data) => {
             if (data.includes("sim:")) {
                 parse = data.replace('sim:', '').replace('\r\n', '').toString();
-                console.log("log: ", parse);
-                msg.payload = JSON.parse(parse);
+                msg.sim_result = JSON.parse(parse);
             }
             else {
                 msg.implement = parseFloat(msg.payload.replace('[', '').replace(']', ''));

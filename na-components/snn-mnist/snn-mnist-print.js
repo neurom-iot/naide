@@ -19,31 +19,36 @@ module.exports = function(RED) {
         };
         var sendFunction = (msg) => {
             // Debug / PkgMgr
-            parse = msg.payload.split("\r\n");
-            number_rate = {};
-            top_rate_number = null;
-            for(var data in parse){
-                if (parse[data].includes(':')){
-                    n_data = parse[data].split(':');
-                    number_rate[n_data[0]] = Number(n_data[1]);
-                    top_rate_number = top_rate_number == null ? n_data[0] : number_rate[top_rate_number] < number_rate[n_data[0]] ? n_data[0] : top_rate_number
+            if (typeof(msg.sim_result) === "undefined") {
+                parse = msg.payload.split("\r\n");
+                number_rate = {};
+                top_rate_number = null;
+                for(var data in parse){
+                    if (parse[data].includes(':')){
+                        n_data = parse[data].split(':');
+                        number_rate[n_data[0]] = Number(n_data[1]);
+                        top_rate_number = top_rate_number == null ? n_data[0] : number_rate[top_rate_number] < number_rate[n_data[0]] ? n_data[0] : top_rate_number
+                    }
                 }
+                json = {
+                    random_select_param:msg.select_number,
+                    top_rate_number:top_rate_number,
+                    number_rate:number_rate
+                }
+                console.log(json);
+                debug = parseJson(json);
+                pkgmgr = "";
+                msg.payload = debug;
+                msg.pkgmgr = pkgmgr;
             }
-            json = {
-                random_select_param:msg.select_number,
-                top_rate_number:top_rate_number,
-                number_rate:number_rate
+            else {
+                msg.payload = msg.sim_result;
             }
-            console.log(json);
-            debug = parseJson(json);
-            pkgmgr = "";
-            msg.payload = debug;
-            msg.pkgmgr = pkgmgr;
             this.send(msg);
         };
-        node.on('input', function(msg) {
+        node.on('input', function(msg, send, done) {
             console.log(msg);
-            sendFunction(msg);
+            sendFunction(c.msg);
         });
         
     }

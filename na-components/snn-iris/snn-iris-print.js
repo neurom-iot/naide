@@ -19,15 +19,21 @@ module.exports = function(RED) {
         };
         var sendFunction = (msg) => {
             // Debug / PkgMgr
-            json = {
-                random_select_param:{x_data:msg.x_data, y_data:msg.y_data},
-                implement:msg.implement,
-                err_rate:msg.err_rate
+            if (typeof(msg.sim_result) === "undefined") {
+                json = {
+                    random_select_param:{x_data:msg.x_data, y_data:msg.y_data},
+                    implement:msg.implement,
+                    err_rate:msg.err_rate
+                }
+                debug = parseJson(json);
+                pkgmgr = "";
+                msg.payload = debug;
+                msg.pkgmgr = pkgmgr;
+                
             }
-            debug = parseJson(json);
-            pkgmgr = "";
-            msg.payload = debug;
-            msg.pkgmgr = pkgmgr;
+            else {
+                msg.payload = msg.sim_result;
+            }
             this.send(msg);
         };
         node.on('input', function(msg) {

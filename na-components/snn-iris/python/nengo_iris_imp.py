@@ -7,8 +7,8 @@ class NullWriter (object):
     def flush(args):
         pass
 nullwrite = NullWriter()
-oldstdout = sys.stdout
-sys.stdout = nullwrite
+#oldstdout = sys.stdout
+#sys.stdout = nullwrite
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,8 +58,8 @@ test_data = {
         out_p_filt: np.tile(np.reshape(y_test, (y_test.shape[0], 1, 1)), (1, n_steps, 1))      
     }
 sim.run_steps(n_steps, data={inp: test_data[inp][:minibatch_size]})
-sys.stdout = oldstdout
-print(sim.data[out_p_filt][-1][-1])
+#sys.stdout = oldstdout
+#print(sim.data[out_p_filt][-1][-1])
 sys.stdout.flush()
 try:
     output = {}
