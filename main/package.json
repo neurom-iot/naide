@@ -59,6 +59,7 @@
         "node-pty": "^0.9.0",
         "node-red-contrib-bigtimer": "^2.7.3",
         "node-red-contrib-openhab2": "^1.1.8",
+        "node-red-dashboard": "^2.30.0",
         "node-red-node-rbe": "^0.2.5",
         "node-red-node-sentiment": "^0.1.4",
         "node-red-node-tail": "^0.0.3",

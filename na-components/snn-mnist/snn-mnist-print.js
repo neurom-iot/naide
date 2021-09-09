@@ -1,6 +1,6 @@
 module.exports = function(RED) {
-    function SNN_MNIST_Print(n) {
-        RED.nodes.createNode(this, n);
+    function SNN_MNIST_Print(c) {
+        RED.nodes.createNode(this, c);
         var node = this;
         var parseJson = (json, level=0) => {
             res = "";
@@ -30,6 +30,7 @@ module.exports = function(RED) {
                         top_rate_number = top_rate_number == null ? n_data[0] : number_rate[top_rate_number] < number_rate[n_data[0]] ? n_data[0] : top_rate_number
                     }
                 }
+                
                 json = {
                     random_select_param:msg.select_number,
                     top_rate_number:top_rate_number,
@@ -48,7 +49,7 @@ module.exports = function(RED) {
         };
         node.on('input', function(msg, send, done) {
             console.log(msg);
-            sendFunction(c.msg);
+            sendFunction(msg);
         });
         
     }

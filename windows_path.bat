@@ -1,0 +1,2 @@
+setx NAIDE "%CD%"
+exit
