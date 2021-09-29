@@ -15,8 +15,6 @@
         <label for="node-input-outs"><i class="fa fa-sign-out"></i> 그래프</label>
         <select id="node-input-outs" style="width:204px">
             <option value="all">선형</option>
-            <option value="end">원형</option>
-            <option value="end">막대형</option>
         </select>
     </div>
 
@@ -25,7 +23,8 @@
         <select id="node-input-outs" style="width:100px">
             <option value="all">json</option>
             <option value="end">npz</option>
-            <option value="end">string</option>
+            <option value="end">npy</option>
+            <option value="end">h5</option>
         </select>
     </div>
 
@@ -68,6 +67,7 @@
                 outs:{value:'all'},
                 topic:{value:''},
                 height: {value: 0},
+                filetype: {value:'json'},
                 width: {value: 0, validate: function(v) {
                     var width = v||0;
                     var currentGroup = $('#node-input-group').val()||this.group;

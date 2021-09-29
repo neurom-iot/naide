@@ -1,5 +1,5 @@
 {
-  "name": "daSim",
+  "name": "dasim",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "node-red": {
     "nodes": {
-      "daSim": "daSim.js"
+      "daSim": "dasim.js"
     }
   },
   "keywords": [

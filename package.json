@@ -31,6 +31,7 @@
         "body-parser": "1.19.0",
         "cheerio": "0.22.0",
         "clone": "2.1.2",
+        "compression": "^1.7.4",
         "content-type": "1.0.4",
         "cookie": "0.4.0",
         "cookie-parser": "1.4.4",

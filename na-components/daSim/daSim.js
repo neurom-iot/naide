@@ -2,7 +2,7 @@ module.exports = function(RED) {
     var ui = require('../../na-simulator/ui')(RED);
     var ChartIdList = {};
 
-    function ChartNode(config) {
+    function daSim(config) {
         RED.nodes.createNode(this, config);
         this.chartType = config.chartType || "line";
         this.newStyle = (!config.hasOwnProperty("useOldStyle") || (config.useOldStyle === true)) ? false : true;
@@ -23,7 +23,7 @@ module.exports = function(RED) {
             tab: tab,
             group: group,
             control: {
-                type: 'chart',
+                type: 'dasim',
                 look: node.chartType,
                 order: config.order,
                 label: config.label,
@@ -43,6 +43,34 @@ module.exports = function(RED) {
                 spanGaps: false,
                 options: {},
             },
+            /*
+            msgFunc: function(msg) {
+                if (typeof msg.sim_result !== 'undefined') {
+                    var x_data = msg.sim_result.trange;
+                    var y_data = msg.sim_result.data;
+
+                    var data = [];
+
+                    for(var j = 0; j < y_data.length; j++) {
+                        var d = [];
+                        for(var i = 0; i < x_data.length; i++) {
+                            var obj = {};
+                            obj.x = x_data[i] * 1000;
+                            obj.y = y_data[i][j];
+                            d.push(obj);
+                        }
+                        data.push(d);
+                    }
+
+                    var chart = {};
+                    chart.series = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+                    chart.data = data;
+                    chart.labels = [""];
+
+                    msg.payload = [chart];                    
+                }
+                return msg;
+            },*/
             convertBack: function(data) {
                 if (node.newStyle) {
                     if (data && data[0] && data[0].hasOwnProperty("values")) {
@@ -276,5 +304,5 @@ module.exports = function(RED) {
             done();
         })
     }
-    RED.nodes.registerType("daSim", ChartNode);
+    RED.nodes.registerType("dasim", daSim);
 };

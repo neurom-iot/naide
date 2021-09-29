@@ -21,8 +21,8 @@ RED.NAIDE.simulator = (function() {
 
         var content = $("<div>").css({"position":"relative","height":"100%"});
         var toolbar = $('<div class="red-ui-sidebar-header">'+
-            '<span class="button-group"><a id="red-ui-sidebar-debug-filter" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-filter"></i> <span></span></a></span>'+
-            '<span class="button-group"><a id="red-ui-sidebar-debug-clear" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-trash"></i></a></span></div>').appendTo(content);
+            '<span class="button-group"><a id="red-ui-sidebar-file-download" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-download"></i></a></span>'+
+            '</div>').appendTo(content);
 
         var footerToolbar = $('<div>'+
             '<span class="button-group"><a id="red-ui-sidebar-debug-open" class="red-ui-footer-button" href="#"><i class="fa fa-desktop"></i></a></span> ' +

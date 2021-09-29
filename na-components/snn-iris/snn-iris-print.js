@@ -31,9 +31,6 @@ module.exports = function(RED) {
                 msg.pkgmgr = pkgmgr;
                 
             }
-            else {
-                msg.payload = msg.sim_result;
-            }
             this.send(msg);
         };
         node.on('input', function(msg) {
