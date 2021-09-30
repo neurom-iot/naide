@@ -15,6 +15,7 @@ RED.NAIDE.simulator = (function() {
 
     var sbc;
     var numMessages = 100;
+    var chart;
 
     function init(_config) {
         config = _config;
@@ -67,9 +68,9 @@ RED.NAIDE.simulator = (function() {
 
     function processSimMessage(o) {
         obj = JSON.parse(o.msg);
-        const last = obj.payload.last;
-        const data = obj.payload.data;
-        const label = obj.payload.trange;
+        const last = obj.sim_result.last;
+        const data = obj.sim_result.data;
+        const label = obj.sim_result.trange;
         // 표시할 데이터셋 만들기
         let rgb = [
             "0, 84, 255",
@@ -100,7 +101,10 @@ RED.NAIDE.simulator = (function() {
 
 
         let canvas = $("#na-ui-simulator-canvas");
-        let chart = new Chart(canvas, {
+        if (chart) {
+            chart.destroy();
+        }
+        chart = new Chart(canvas, {
             type: 'line',
             data: {
                 labels : label,

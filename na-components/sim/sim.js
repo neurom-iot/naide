@@ -3,21 +3,31 @@ module.exports = function(RED) {
     
     var stack = [];
     var busy = false;
+    var settings = RED.settings;
+    var util = require("util");
+    var events = require("events");
+    var path = require("path");
+    var debuglength = RED.settings.debugMaxLength || 1000;
+    util.inspect.styles.boolean = "red";
+
+    const fs = require('fs');
+
+    function makeFile(msg) {
+        console.log("!@!@#!@#!", msg);
+        sim_result = msg.sim_result;
+        // npy, npz, hdf5
+        console.log(sim_result);
+        const spawn = require('child_process').spawn();
+        const pythonProcess = spawn('python', ["na-components/sim/python/makefile.py", sim_result]);
+        // json
+
+    }
 
     function sendDebug(msg) {
+        makeFile(msg.msg);
         msg = RED.util.encodeObject(msg,{maxLength:debuglength});
         RED.comms.publish("sim-message",msg);
     }
-
-    
-
-    "use strict";
-     var settings = RED.settings;
-     var util = require("util");
-     var events = require("events");
-     var path = require("path");
-     var debuglength = RED.settings.debugMaxLength || 1000;
-     util.inspect.styles.boolean = "red";
 
     function SimComponent(n) {
         var hasEditExpression = (n.targetType === "jsonata");
@@ -99,7 +109,7 @@ module.exports = function(RED) {
 
         //object (topic + msg + payload)
         this.on('input', function(msg, send, done){
-            if(typeof(msg.payload) === "undefined" || typeof(msg.payload.sim) === "undefined"){
+            if(typeof(msg.payload) === "undefined" || typeof(msg.sim_result.sim) === "undefined"){
                 return;
             }
             else{
@@ -158,4 +168,33 @@ module.exports = function(RED) {
         res.sendFile(req.params[0], options);
     });
 
+    
+
+    RED.httpAdmin.get("/naide/makefile/sim/*",function(req,res) {
+        var ftype = req.params[0]
+        switch(ftype) {
+            case "npz":
+                break;
+            case "npy":
+
+                break;
+            case "h5":
+
+                break;
+            case "json":
+
+                break;
+            default:
+                res.json({res: false});
+                break;
+        };
+    });
+
+    RED.httpAdmin.get("/naide/download/sim",function(req,res) {
+        var options = {
+            root: __dirname + '/simulator/',
+            dotfiles: 'deny'
+        };
+        res.sendFile(req.params[0], options);
+    });
 };

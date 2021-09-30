@@ -43,7 +43,6 @@ RED.probe = (function() {
         var toolbar = $('<div class="red-ui-sidebar-header">'+
             '<span class="button-group"><a id="red-ui-sidebar-probe-filter" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-filter"></i> <span></span></a></span>'+
             '<span class="button-group"><a id="red-ui-sidebar-probe-clear" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-trash"></i></a></span></div>').appendTo(content);
-
         var footerToolbar = $('<div>'+
             // '<span class="button-group">'+
             //     '<a class="red-ui-footer-button-toggle text-button selected" id="red-ui-sidebar-probe-view-list" href="#"><span data-i18n="">list</span></a>'+
@@ -223,7 +222,14 @@ RED.probe = (function() {
         });
         RED.popover.tooltip(toolbar.find("#red-ui-sidebar-probe-clear"),RED._('node-red:probe.sidebar.clearLog'),"core:clear-probe-messages");
 
-
+        // clear
+        //$(document).ready(function() {
+        //    var trashButton = $("#red-ui-sidebar-probe-clear");
+        //    trashButton.click(function() {
+        //        messageList.empty();
+        //    });
+        //});
+        
 
         return {
             content: content,
