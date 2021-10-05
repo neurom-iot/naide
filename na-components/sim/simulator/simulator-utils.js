@@ -17,11 +17,20 @@ RED.NAIDE.simulator = (function() {
     var numMessages = 100;
     var chart;
 
+    var sim_data;
+
     function init(_config) {
         config = _config;
 
         var content = $("<div>").css({"position":"relative","height":"100%"});
         var toolbar = $('<div class="red-ui-sidebar-header">'+
+            '<label style="display: inline-block; margin-right: 3px;">Download File Type : </label>'+
+            '<select style="margin-bottom: 2px; padding: 0px; width: 100px; height: 25px; margin-right: 5px;" id="sim-download-type">'+
+                '<option value="json">JSON</option>'+
+                '<option value="npz">npz</option>'+
+                '<option value="npy">npy</option>'+
+                '<option value="h5">h5</option>'+
+            '</select>'+
             '<span class="button-group"><a id="red-ui-sidebar-file-download" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-download"></i></a></span>'+
             '</div>').appendTo(content);
 
@@ -33,6 +42,42 @@ RED.NAIDE.simulator = (function() {
             '</div>').appendTo(content);
 
         var graphCanvas = $('<canvas id="na-ui-simulator-canvas" height="300"></canvas>').appendTo(simulatorContent);
+        // ajax
+        $(function() {
+            $("#red-ui-sidebar-file-download").click(function() {
+                let type = $("#sim-download-type").val()
+                if (!sim_data) {
+                    RED.notify("다운로드 오류 : 시뮬레이션 데이터가 없습니다.","error");
+                    return;
+                }
+                if (type == "json") {
+                    var element = document.createElement('a');
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(sim_data)));
+                    element.setAttribute('download', "simulator-data.json");
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                }
+                else {
+                    $.ajax({
+                        url: "/naide/makefile/sim/" + type,
+                        type: "POST",
+                        data: {sim_data: sim_data},
+                        success: function(result) {
+                            if (result.res) {
+                                
+                            }
+                            else {
+                                console.log(result.err);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        
+
         return {
             content: content,
             footer: footerToolbar
@@ -68,6 +113,7 @@ RED.NAIDE.simulator = (function() {
 
     function processSimMessage(o) {
         obj = JSON.parse(o.msg);
+        sim_data = obj.sim_result;
         const last = obj.sim_result.last;
         const data = obj.sim_result.data;
         const label = obj.sim_result.trange;

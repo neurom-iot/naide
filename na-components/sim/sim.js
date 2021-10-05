@@ -17,9 +17,6 @@ module.exports = function(RED) {
         sim_result = msg.sim_result;
         // npy, npz, hdf5
         console.log(sim_result);
-        const spawn = require('child_process').spawn();
-        const pythonProcess = spawn('python', ["na-components/sim/python/makefile.py", sim_result]);
-        // json
 
     }
 
@@ -170,10 +167,14 @@ module.exports = function(RED) {
 
     
 
-    RED.httpAdmin.get("/naide/makefile/sim/*",function(req,res) {
+    RED.httpAdmin.post("/naide/makefile/sim/*",function(req,res) {
         var ftype = req.params[0]
+        console.log(ftype);
+        var data = req.body.sim_data;
+        console.log(data);
         switch(ftype) {
             case "npz":
+                
                 break;
             case "npy":
 
@@ -185,7 +186,7 @@ module.exports = function(RED) {
 
                 break;
             default:
-                res.json({res: false});
+                res.json({res: false, err: "unknown file type"});
                 break;
         };
     });
@@ -198,3 +199,4 @@ module.exports = function(RED) {
         res.sendFile(req.params[0], options);
     });
 };
+
