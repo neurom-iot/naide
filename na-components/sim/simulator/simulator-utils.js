@@ -26,10 +26,10 @@ RED.NAIDE.simulator = (function() {
         var toolbar = $('<div class="red-ui-sidebar-header">'+
             '<label style="display: inline-block; margin-right: 3px;">Download File Type : </label>'+
             '<select style="margin-bottom: 2px; padding: 0px; width: 100px; height: 25px; margin-right: 5px;" id="sim-download-type">'+
-                '<option value="json">JSON</option>'+
+                '<option value="json">json</option>'+
                 '<option value="npz">npz</option>'+
                 '<option value="npy">npy</option>'+
-                '<option value="h5">h5</option>'+
+                '<option value="h5">hdf5</option>'+
             '</select>'+
             '<span class="button-group"><a id="red-ui-sidebar-file-download" class="red-ui-sidebar-header-button" href="#"><i class="fa fa-download"></i></a></span>'+
             '</div>').appendTo(content);
@@ -66,7 +66,13 @@ RED.NAIDE.simulator = (function() {
                         data: {sim_data: sim_data},
                         success: function(result) {
                             if (result.res) {
-                                
+                                var filename = result.res;
+                                var element = document.createElement('a');
+                                element.setAttribute('href', '/naide/download/sim/' + filename);
+                                element.style.display = 'none';
+                                document.body.appendChild(element);
+                                element.click();
+                                document.body.removeChild(element);
                             }
                             else {
                                 console.log(result.err);

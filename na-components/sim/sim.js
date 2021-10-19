@@ -164,26 +164,26 @@ module.exports = function(RED) {
         };
         res.sendFile(req.params[0], options);
     });
-
     
+    RED.httpAdmin.get("/naide/download/sim/*", function(req, res) {
+        var filename = req.params[0]
+        res.download(__dirname + "/python/" + filename);
+    })
 
     RED.httpAdmin.post("/naide/makefile/sim/*",function(req,res) {
         var ftype = req.params[0]
-        console.log(ftype);
         var data = req.body.sim_data;
-        console.log(data);
+        let spawn = require('child_process').spawn;
         switch(ftype) {
             case "npz":
-                
-                break;
             case "npy":
-
-                break;
             case "h5":
-
-                break;
-            case "json":
-
+                let str = JSON.stringify(data);
+                let pythonProcess = spawn('python', ['na-components/sim/python/makefile.py', ftype, str])
+                pythonProcess.stdout.on('data', function(data) {
+                    let buff = Buffer.from(data, 'utf-8').toString();
+                    res.json({res: buff});
+                });     
                 break;
             default:
                 res.json({res: false, err: "unknown file type"});
