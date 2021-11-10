@@ -1,3 +1,5 @@
+const { parse } = require("mustache");
+
 module.exports = function(RED) {
     function SNN_MNIST_Print(c) {
         RED.nodes.createNode(this, c);
@@ -19,15 +21,17 @@ module.exports = function(RED) {
         };
         var sendFunction = (msg) => {
             // Debug / PkgMgr
-            if (typeof(msg.sim_result) === "undefined") {
-                parse = msg.payload.split("\r\n");
-                number_rate = {};
+            if (typeof(msg.sim_result) !== "undefined") {
+                let last = msg.sim_result.last;
+                number_rate = last;
                 top_rate_number = null;
-                for(var data in parse){
-                    if (parse[data].includes(':')){
-                        n_data = parse[data].split(':');
-                        number_rate[n_data[0]] = Number(n_data[1]);
-                        top_rate_number = top_rate_number == null ? n_data[0] : number_rate[top_rate_number] < number_rate[n_data[0]] ? n_data[0] : top_rate_number
+                console.log("ASDASD", msg.sim_result);
+                for(var i = 0; i < last.length; i++) {
+                    if (top_rate_number === null) {
+                        top_rate_number = i;
+                    }
+                    else if (last[top_rate_number] < last[i]) {
+                        top_rate_number = i;
                     }
                 }
                 
@@ -36,16 +40,20 @@ module.exports = function(RED) {
                     top_rate_number:top_rate_number,
                     number_rate:number_rate
                 }
-                console.log(json);
+                //console.log(json);
                 debug = parseJson(json);
                 pkgmgr = "";
-                msg.payload = debug;
+                msg.payload = top_rate_number;
                 msg.pkgmgr = pkgmgr;
+                msg.src = msg.sim_result.image;
             }
             this.send(msg);
         };
         node.on('input', function(msg, send, done) {
-            console.log(msg);
+            //console.log(msg);
+            if (typeof msg.select_number === "undefined") {
+                msg.select_number = 0;
+            }
             sendFunction(msg);
         });
         

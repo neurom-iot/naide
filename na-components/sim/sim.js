@@ -13,10 +13,10 @@ module.exports = function(RED) {
     const fs = require('fs');
 
     function makeFile(msg) {
-        console.log("!@!@#!@#!", msg);
+        //console.log("!@!@#!@#!", msg);
         sim_result = msg.sim_result;
         // npy, npz, hdf5
-        console.log(sim_result);
+        //console.log(sim_result);
 
     }
 

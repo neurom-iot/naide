@@ -1,0 +1,849 @@
+<!--
+ Copyright 2016-2017 Smart-Tech Controle e Automação
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+		 http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<script type="text/javascript">
+    RED.nodes.registerType('ui_media', {
+        category: 'dashboard',
+        color: 'rgb( 63, 173, 181)',
+        defaults: {
+            group: {
+                type: 'ui_group',
+                required: true
+            },
+            name: {value: ''},
+            width: {
+                value: 0,
+                validate: function (v) {
+                    var width = v || 0;
+                    var currentGroup = $('#node-input-group').val() || this.group;
+                    var groupNode = RED.nodes.node(currentGroup);
+                    valid = !groupNode || +width <= +groupNode.width;
+                    $("#node-input-size").toggleClass("input-error", !valid);
+
+                    return valid;
+                }
+            },
+            height: {value: 0},
+            order: {value: 0},
+            category: {value: ''},
+            file: {value: ''},
+            layout: {value: 'adjust'},
+            showcontrols: {value: true},
+            loop: {value: true},
+            onstart: {value: false},
+            scope: {value: 'local'},
+  	    tooltip: {value: ''}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "ui_image.png",
+        paletteLabel: 'media',
+        align: 'right',
+        label: function () {
+            return this.name || 'media';
+        },
+        labelStyle: function () {
+            return this.name ? "node_label_italic" : "";
+        },
+        oneditprepare: function () {
+            const bt_category_cancel = $('#bt-category-cancel');
+            const bt_category_save = $('#bt-category-save');
+            const bt_media_cancel = $('#bt-media-cancel');
+
+            var divCategory = $('#div-category');
+            var divNewCategory = $('#div-new-category');
+            var divFile = $('#div-file');
+            var divNewFile = $('#div-new-file');
+
+            const input_file = $('#node-input-file');
+            const input_category = $('#node-input-category');
+            const input_link = $('#node-input-link');
+            const input_new_category = $("#node-input-new-category");
+            const media_preview = $('#img-preview');
+            const bar_progress = $("#progress-upload");
+
+            $("#node-input-size").elementSizer({
+                width: "#node-input-width",
+                height: "#node-input-height",
+                group: "#node-input-group"
+            });
+
+            var that = this;
+            var filesToUpload = null;
+
+            // ----- functions -----
+
+            function copyLinkToClipboard() {
+                var $temp = $("<input>");
+                $("body").append($temp);
+                var val = $("#node-input-link").val();
+                $temp.val(val).select();
+                document.execCommand("copy");
+                $temp.remove();
+                RED.notify('"' + val + '" copied to clipboard!', 'status', false, 1500);
+            }
+
+            function updateCategoryList(selected) {
+                var input_category = $('#node-input-category');
+                var input_file = $('#node-input-file');
+
+                divNewCategory.hide();
+                divCategory.show();
+                divFile.hide();
+
+                input_category.find("option").remove().end();
+                input_category.append($("<option></option>").val("").text(""));
+
+                $.getJSON('uimedia', function (categories) {
+
+                    categories.forEach(function (category) {
+                        let option = $("<option></option>");
+
+                        if (selected == category) {
+                            option.attr('selected', 'selected')
+                        }
+
+                        option.val(category);
+                        option.text(category);
+
+                        input_category.append(option);
+                    });
+
+                    updateMediaList();
+                });
+            }
+
+            function updateMediaList() {
+
+                var input_file = $('#node-input-file');
+                var category = $('#node-input-category').val();
+
+                divNewFile.hide();
+                divFile.hide();
+
+                input_file.find("option").remove().end();
+
+                if(!category) return updateMediaPreview(); //leave it empty if there's no category
+
+                $.getJSON("uimedia/" + category, function (medias) {
+
+                    divFile.show();
+                    medias.forEach(function (media) {
+
+                        let option = $("<option></option>");
+
+                        if (that.file == media) {
+                            option.attr('selected', 'selected')
+                        }
+
+                        option.val(media);
+                        option.text(media);
+
+                        input_file.append(option);
+                    });
+
+                    updateMediaPreview();
+                });
+            }
+
+            function getFileType (url) {
+              return String(String(url).split('.').pop());
+            }
+
+            function updateMediaPreview() {
+                var file = $('#node-input-file').val();
+                var category = $('#node-input-category').val();
+                var type = undefined;
+                var media_preview = $("#img-preview");// img by default
+                var unused = $("#video-preview"); // stores the other type of preview and hide it
+                // checks which kind of preview code to show
+                let url = category + "/" + file
+                type = getFileType(url);
+                if ((/(gif|jpg|jpeg|tiff|png)$/i).test(type)) {
+                     media_preview = $("#img-preview");
+                     unused = $("#video-preview");
+                } else if ((/(mp4|webm|ogv)$/i).test(type)) {
+                     media_preview = $("#video-preview");
+                     unused = $("#img-preview");
+                }
+
+                if(category && file) {
+                    media_preview.attr('src', 'uimedia/' + url);
+                    unused.hide();
+                    media_preview.show();
+                    input_link.val(url)
+                } else {
+                    unused.hide();
+                    media_preview.hide();
+                    input_link.val('');
+                }
+            }
+
+            function saveCategory() {
+
+                //TODO: sanitize input
+
+                let value = input_new_category.val();
+                input_new_category.val('');
+
+                if (!value) {
+                    RED.notify("Invalid category", "error", false, 5000);
+                    return;
+                }
+
+                $.ajax({
+                    url: 'uimedia/' + value,
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        //Upload progress
+                        bar_progress.val(0);
+                        bar_progress.show();
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                bar_progress.val(percentComplete * 100);
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    success: function (data, textStatus) {
+                        bar_progress.hide();
+                        updateCategoryList(value);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        bar_progress.hide();
+                        RED.notify("Error API: " + errorThrown, "error", false, 5000);
+                        updateCategoryList();
+                    }
+                });
+            }
+
+            function removeCategory() {
+                var category = document.getElementById("node-input-category");
+                if(!category) return;
+                category = category.options[category.selectedIndex].value;
+                $.ajax({
+                    url: "uimedia/" + category,
+                    type: 'DELETE',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data, textStatus) {
+                        updateCategoryList(undefined);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        RED.notify("Error API: " + errorThrown, "error", false, 5000);
+                        updateCategoryList();
+                    }
+                });
+            };
+
+            function uploadMedias(event) {
+
+                let category = input_category.val();
+                let validFiles = true;
+
+                if(!category || !filesToUpload || !filesToUpload.length) return;
+
+                $.each(filesToUpload, function (key, value) {
+                    if (!(/\.(gif|jpg|jpeg|tiff|png|mp4|webm|ogv)$/i).test(value.name)) {
+                        validFiles = false;
+                    }
+                });
+
+                if (!validFiles) {
+                    RED.notify("Incompatible File", "error", false, 5000);
+                    $("#node-input-upload").val('');
+                    filesToUpload = null;
+                    return;
+                }
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                var data = new FormData();
+
+                $.each(filesToUpload, function (key, value) {
+                    data.append(key, value);
+                });
+
+                var link = "uimedia/" + category + "/" + filesToUpload[0].name;
+
+                $.ajax({
+                    url: link,
+                    type: 'POST',
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        //Upload progress
+                        bar_progress.val(0);
+                        bar_progress.show();
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                bar_progress.val(percentComplete * 100);
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    success: function (data, textStatus) {
+                        bar_progress.hide();
+                        updateMediaList();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        bar_progress.hide();
+                        RED.notify("Error API: " + errorThrown, "error", false, 5000);
+                        updateMediaList();
+                    }
+                });
+            }
+
+            function removeMedia() {
+
+                let category = input_category.val();
+                /* to-do: investigate why 'input_file.val()' Returns
+                 * the file current being shown on the dashboard instead
+                 * of the node currently being selected
+                 */
+                var file = document.getElementById("node-input-file");
+                if(!file) return updateMediaList();
+
+                file = file.options[file.selectedIndex].value;
+
+                $.ajax({
+                    url: 'uimedia/' + category + '/' + file,
+                    type: 'DELETE',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data, textStatus) {
+                        updateMediaList()
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        RED.notify("Error API: " + errorThrown, "error", false, 5000);
+                        updateMediaList();
+                    }
+                });
+            }
+
+            // ----- create tabs -------
+      			var tabs = RED.tabs.create({
+      				id: "node-config-media-endpoint-tabs",
+      				onchange: function(tab) {
+      					$("#node-media-edit-tabs").children().hide();
+      					$("#" + tab.id).show();
+      				}
+      			});
+
+      			tabs.addTab({
+      				id: "media-endpoint-tab-config",
+      				label: this._("ui_media.config.label.configuration")
+      			});
+      			tabs.addTab({
+      				id: "media-endpoint-tab-file",
+      				label: this._("ui_media.files.label.files")
+      			});
+            setTimeout(function() {
+      				tabs.resize()
+      			}, 0);
+
+            $("#media-endpoint-tab-config").show();
+            // ----- attach events -----
+
+            $("#bt-copy").click(copyLinkToClipboard);
+
+            RED.menu.init({
+                id: "btn-category-options",
+                options: [
+                    {
+                        id: "btn-category-new",
+                        label: that._('ui_media.files.label.add-new'),
+                        onselect: function () {
+                            input_link.val('');
+                            input_new_category.val('');
+
+                            divCategory.hide();
+                            divNewCategory.show();
+                            divFile.hide();
+                            divNewFile.hide();
+                            media_preview.hide();
+
+                            input_new_category.focus();
+                        },
+                    },
+                    {
+                        id: "btn-category-remove",
+                        label: that._('ui_media.files.label.remove-category'),
+                        onselect: function () {
+                            var value = $('#node-input-category').val();
+
+                            if (!value) return;
+
+                            $("#node-dialog-confirm-remove-category").dialog("open");
+                        },
+                    }
+                ]
+            });
+
+            RED.menu.init({
+                id: "btn-media-options",
+                options: [
+                    {
+                        id: "btn-media-new",
+                        label: that._('ui_media.files.label.add-new'),
+                        onselect: function () {
+                            input_link.val('');
+                            $("#node-input-upload").val('');
+                            filesToUpload = null;
+
+                            divFile.hide();
+                            divNewFile.show();
+                            media_preview.hide();
+                        },
+                    },
+                    {
+                        id: "btn-media-remove",
+                        label: that._('ui_media.files.label.remove-media'),
+                        onselect: function () {
+                            var value = $('#node-input-file').val();
+
+                            if (!value) return;
+
+                            $("#node-dialog-confirm-remove-media").dialog("open");
+                        },
+                    }
+                ]
+            });
+
+            bt_category_cancel.click(function(){
+                updateCategoryList(input_category.val());
+            });
+            bt_category_save.click(saveCategory);
+
+            input_category.change(updateMediaList);
+            input_new_category.keypress(function (e) {
+                if (e.which === 13) {
+                    saveCategory();
+                }
+            });
+
+            bt_media_cancel.click(updateMediaList);
+
+            input_file.change(updateMediaPreview);
+
+            $("#node-input-upload").on('change', function (event) {
+                filesToUpload = event.target.files;
+            });
+            $("#bt-upload").click(uploadMedias);
+
+            // -----------
+
+            $("#node-dialog-confirm-remove-category").dialog({
+                title: "Remove category",
+                autoOpen: false,
+                width: 550,
+                height: "auto",
+                buttons: [{
+                        id: "bt-cancel-remove",
+                        text: "Cancel",
+
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    {
+                        id: "bt-confirm-remove",
+                        text: "Remove",
+                        class: "primary",
+
+                        click: function () {
+                            removeCategory();
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+            $("#node-dialog-confirm-remove-media").dialog({
+                title: "Remove media",
+                autoOpen: false,
+                width: 550,
+                height: "auto",
+                buttons: [{
+                        id: "bt-cancel-remove",
+                        text: "Cancel",
+
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    {
+                        id: "bt-confirm-remove",
+                        text: "Remove",
+                        class: "primary",
+
+                        click: function () {
+                            removeMedia();
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+
+            // -----------
+
+            bar_progress.hide();
+            updateCategoryList(that.category);
+        }
+
+    });
+</script>
+
+<script type="text/x-red" data-template-name="ui_media">
+    <!-- Tabs -->
+    <div class="form-row">
+		    <ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-config-media-endpoint-tabs"></ul>
+	  </div>
+    <!-- Tabs -->
+    <div id="node-media-edit-tabs" style="min-height: 170px;">
+      <div class="hide" id="node-dialog-confirm-remove-category">
+          <p><strong>Warning:</strong> This will also delete all medias inside. This action cannot be undone. Are you sure?</p>
+      </div>
+      <div class="hide" id="node-dialog-confirm-remove-media">
+          <p><strong>Warning:</strong> This action cannot be undone. Are you sure?</p>
+      </div>
+
+      <div id="media-endpoint-tab-config" style="display:none">
+        <!-- Group -->
+        <div class="form-row" id="template-row-group">
+            <label for="node-input-group">
+                <i class="fa fa-table"></i> <span data-i18n="ui_media.config.label.group"></span></label>
+            <input type="text" id="node-input-group" data-i18n="ui_media.config.label.group">
+        </div>
+        <!-- Group -->
+
+        <!-- Size -->
+        <div class="form-row" id="template-row-size">
+            <label>
+                <i class="fa fa-object-group"></i> <span data-i18n="ui_media.config.label.size"></span></label>
+            <input type="hidden" id="node-input-width">
+            <input type="hidden" id="node-input-height">
+            <button class="editor-button" id="node-input-size"></button>
+        </div>
+        <!-- Size -->
+
+        <!-- Layout -->
+        <div class="form-row">
+            <label><i class="fa fa-th-large"></i> <span data-i18n="ui_media.config.layouts.layout"></span></label>
+            <select style="width:70%" id="node-input-layout">
+                <option value="adjust" data-i18n="ui_media.config.layouts.adjust"></option>
+                <option value="center" data-i18n="ui_media.config.layouts.center"></option>
+                <option value="expand" data-i18n="ui_media.config.layouts.expand"></option>
+                <option value="side" data-i18n="ui_media.config.layouts.side-by-side"></option>
+            </select>
+        </div>
+        <!-- Layout -->
+
+	<!-- Tooltip -->
+        <div class="form-row">
+           <label for="node-input-tooltip">
+           <i class="fa fa-tag"></i> <span data-i18n="ui_media.files.label.tooltip"></span></label>
+           <input type="text" id="node-input-tooltip" data-i18n="[placeholder]ui_media.files.label.tooltip" placeholder="Tooltip">
+        </div>
+        <!-- Tooltip -->
+
+        <!-- Video Opions --->
+        <div class="form-row">
+          <div class="form-row">
+            <label for="node-input-tosidebar"><span data-i18n="ui_media.files.label.video-options"></span></label>
+            <label for="node-input-onstart" style="width:70%">
+              <input type="checkbox" id="node-input-onstart" style="display:inline-block; width:22px; vertical-align:baseline;"><span data-i18n="ui_media.files.label.run-on-start"></span>
+            </label>
+          </div>
+          <div class="form-row">
+            <label ></label>
+            <label for="node-input-showcontrols" style="width:70%">
+              <input type="checkbox" id="node-input-showcontrols" style="display:inline-block; width:22px; vertical-align:baseline;"><span data-i18n="ui_media.files.label.show-controls"></span>
+            </label>
+          </div>
+          <div class="form-row">
+            <label></label>
+            <label for="node-input-loop" style="width:70%">
+              <input type="checkbox" id="node-input-loop" style="display:inline-block; width:22px; vertical-align:baseline;"><span data-i18n="ui_media.files.label.loop"></span>
+            </label>
+          </div>
+        </div>
+        <!-- Video Opions --->
+
+        <!-- Name -->
+        <div class="form-row">
+            <label for="node-input-name">
+                <i class="fa fa-tag"></i> <span data-i18n="ui_media.config.label.name"></span></label>
+            <input type="text" id="node-input-name" data-i18n="[placeholder]ui_media.config.label.name" placeholder="Name">
+        </div>
+        <!-- Name -->
+      </div>
+
+      <!-- File Tab -->
+      <div id="media-endpoint-tab-file" style="display:none">
+        <!-- Category -->
+        <div id="div-category" class="form-row">
+            <label for="node-input-category"><i class="fa fa-tag"></i> <span data-i18n="ui_media.files.label.category"></span></label>
+            <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+                <div style="position: absolute; left: 0px; right: 50px;">
+                    <select style="width:100%" id="node-input-category">
+                    </select>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 0px; top: 0px;">
+                    <a id="btn-category-options" class="editor-button red-ui-button" data-toggle="dropdown">
+                        <i class="fa fa-book"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Category -->
+
+        <!-- New Category -->
+        <div id="div-new-category" class="form-row">
+            <label for="node-input-new-category"><i class="fa fa-tag"></i><span data-i18n="ui_media.files.label.category"></span></label>
+            <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+                <div style="position: absolute; left: 0px; right: 75px;">
+                    <input style="width:100%" type="text" id="node-input-new-category">
+                </div>
+                <div class="btn-group" style="position: absolute; right: 35px; top: 0px;">
+                    <a id="bt-category-save" class="editor-button"><i class="fa fa-check"></i></a>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 0px; top: 0px;">
+                    <a id="bt-category-cancel" class="editor-button"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- New Category -->
+
+        <!-- File -->
+        <div id="div-file" class="form-row">
+            <label for="node-input-file"><i class="fa fa-file-media-o"></i><span data-i18n="ui_media.files.label.file"></span></label>
+            <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+                <div style="position: absolute; left: 0px; right: 50px;">
+                    <select style="width:100%" id="node-input-file">
+                    </select>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 0px; top: 0px;">
+                    <a id="btn-media-options" class="editor-button red-ui-button" data-toggle="dropdown">
+                        <i class="fa fa-book"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- File -->
+
+        <!-- New Media -->
+        <div id="div-new-file" class="form-row">
+            <label><i class="fa fa-file-media-o"></i></label>
+            <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+                <div style="position: absolute; left: 0px; right: 75px;">
+                    <input type="file" id="node-input-upload" name="fileuploadfile" style="width: 100%" accept="media/*" multiple>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 35px; top: 0px;">
+                    <a id="bt-upload" class="editor-button"><i class="fa fa-upload"></i></a>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 0px; top: 0px;">
+                    <a id="bt-media-cancel" class="editor-button"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- New Media -->
+
+        <div class="form-row">
+            <progress style="width: 95%; height: 5px" id="progress-upload" value="0" min="0" max="100"></progress>
+        </div>
+
+        <!-- Link -->
+        <div class="form-row">
+            <label for="node-input-link"><i class="fa fa-link"></i> <span data-i18n="ui_media.config.label.link"></span></label>
+            <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+                <div style="position: absolute; left: 0px; right: 40px;">
+                    <input style="width:100%" type="text" id="node-input-link" readonly>
+                </div>
+                <div class="btn-group" style="position: absolute; right: 0px; top: 0px;">
+                    <a id="bt-copy" class="editor-button">
+                        <i class="fa fa-clipboard"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Link -->
+
+        <div class="formkk-row" style="text-align: left">
+            <label style="padding: 5px"><span data-i18n="ui_media.files.label.preview"></span></label>
+            <hr>
+        </div>
+
+        <div class="form-row" style="text-align: center">
+            <img id="img-preview" style="height:auto; width:90%" src="">
+            <video id="video-preview" controls style="height:auto; width:90%" src="">
+        </div>
+      </div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ui_media">
+    <p>Displays media files and URLs on the Dashboard</p>
+
+    <h3>Input</h3>
+    <dl class="message-properties">
+        <dt>payload
+            <span class="property-type">object | string | Buffer</span>
+        </dt>
+        <dd>
+            Selects which media will be displayed. It should be a string exactly 
+            like the <i>Link</i> field displays on the configuration panel, an
+            object with the <code>category</code> and <code>name</code> properties,
+            or a Buffer, whose content will be displayed according to the 
+            <code>mimetype</code> specified
+
+            <h5>Examples:</h5>
+            <pre>
+{
+    payload: "category/file name"
+}
+            </pre>
+            <pre>
+{
+    payload: {
+        category: "category", 
+        name: "file name"
+    } 
+}
+            </pre>
+        </dd>
+
+        <dt>src 
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            Allows to directly set a full URL to be displayed. This takes precedence
+            over the <code>payload</code> property. Note that security policies of 
+            your browser or from the server where the media is hosted may prevent 
+            it from being correctly displayed. 
+
+            <h5>Examples:</h5>
+            <code>{ src: "https://http.cat/200.jpg" }</code>
+        </dd>
+
+        <dt>layout
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            Overrides the current layout being used. Can be either
+            <code>adjust</code>, <code>center</code>, <code>side</code> or
+            <code>expand</code>.
+        </dd>
+        
+        <dt>play
+          <span class="property-type">boolean</span>
+        </dt>
+        <dd>
+            When playing a video, sending a message with the <code>play</code>
+            property allows the video to be played or paused, whether its value 
+            is <code>true</code> or <code>false</code>
+        </dd>
+
+        <dt>onstart
+            <span class="property-type">boolean</span>
+        </dt>
+        <dd>
+            Controls whether a video should start playing as soon as loaded.
+            Overrides the <i>Run on start</i> option set on the configuration panel
+        </dd>
+
+        <dt>loop
+            <span class="property-type">boolean</span>
+        </dt>
+        <dd>
+            Controls whether a video should play in loop
+            Overrides the <i>Loop</i> option set on the configuration panel
+        </dd>
+
+        <dt>controls
+            <span class="property-type">boolean</span>
+        </dt>
+        <dd>
+            Controls whether the video control buttons (like play button, volume, etc) 
+            should be displayed. Overrides the <i>Show controls</i> option set on the 
+            configuration panel
+        </dd>
+
+        <dt>mimetype
+            <span class="property-type">string</span>
+        </dt>
+        <dd>
+            Allows the media type to be pre-determined. This property is mandatory when
+            <code>payload</code> is of type Buffer, because the media type cannot be 
+            inferred from the Buffer's content alone.
+            <h5>Examples:</h5>
+            <ul>
+                <li>Sending a PNG Image: <code>"image/png"</code></li>
+                <li>Sending a JPG Image: <code>"image/jpeg"</code></li>
+            </ul>
+        </dd>
+
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload
+           <span class="property-type">object</span>
+        </dt>
+        <dd>
+            When an image is clicked, all values relate to the clicked position
+            are sent as the output payload
+        </dd>
+    </dl>
+
+    <h3>Details</h3>
+    <dl class="message-properties">
+        <p>
+            This node allows displaying images, audio and video files on the
+            Dashboard, handling the upload of files and serving them to the
+            Dashboard users
+        </p>
+        <p>
+            In the <b>Configuration</b> tab, besides the common dashboard placement
+            rules, the <i>Layout</i> configuration allows the disposition of an image 
+            to be controlled, and the <i>Video Options</i> set options regarding video
+            playback
+        </p>
+        <p>
+            The media files can be uploaded on the <b>Files</b> tab, where categories
+            can be created and files can be uploaded to Node-RED, so that they can be 
+            served to the Dashboard later. The <i>Link</i> field then generates the 
+            string that should be sent on <code>payload</code> for displaying that 
+            particular media. You can also leave no media selected (after uploading
+            them), so that no media is displayed by default when deploying.
+        </p>
+    </dl>
+</script>

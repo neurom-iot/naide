@@ -143,12 +143,12 @@ function add(opt) {
             msg = opt.msgFunc(msg);
         }
         if (typeof msg.enabled === 'boolean') {
+            
             var state = replayMessages[opt.node.id];
             if (!state) { replayMessages[opt.node.id] = state = {id: opt.node.id}; }
             state.disabled = !msg.enabled;
             io.emit(updateValueEventName, state);
         }
-
         // remove res and req as they are often circular
         if (msg.hasOwnProperty("res")) { delete msg.res; }
         if (msg.hasOwnProperty("req")) { delete msg.req; }

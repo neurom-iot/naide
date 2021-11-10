@@ -5,7 +5,7 @@ from PIL import Image
 import time
 import numpy as np
 
-cam = cv2.VideoCaputre(0)
+cam = cv2.VideoCapture(0)
 cam.set(3,112)
 cam.set(4,112)
 while True:

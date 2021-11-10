@@ -1,0 +1,37 @@
+{
+  "ui_media": {
+    "config": {
+      "label": {
+        "name": "Name",
+        "group": "Group",
+        "size": "Size",
+        "link": "Link",
+        "configuration": "Configuration",
+        "alttext": "Alt"
+      },
+      "layouts": {
+        "layout": "Layout",
+        "center": "Center",
+        "expand": "Expand",
+        "adjust": "Adjust",
+        "side-by-side": "Side by side"
+      }
+    },
+    "files": {
+      "label": {
+        "files": "Files",
+        "category": "Category",
+        "file": "File",
+        "video-options": "Video Options",
+        "run-on-start": "Run on start",
+        "show-controls": "Show controls",
+        "loop": "Loop",
+        "preview": "Preview",
+        "add-new": "Add new...",
+        "remove-category": "Remove category...",
+        "remove-media": "Remove media...",
+        "tooltip": "Tooltip"
+      }
+    }
+  }
+}

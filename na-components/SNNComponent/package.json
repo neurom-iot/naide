@@ -1,0 +1,19 @@
+{
+  "name": "SNNComponent",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "SNNComponent"
+  },
+  "node-red": {
+    "nodes": {
+      "SNNComponent": "src/hnu/snn-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "KSKIM2",
+  "license": "UNLICENSED"
+}

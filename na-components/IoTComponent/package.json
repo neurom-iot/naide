@@ -1,0 +1,19 @@
+{
+  "name": "IoTComponent",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "IoTComponent"
+  },
+  "node-red": {
+    "nodes": {
+      "IoTComponent": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "KSKIM2",
+  "license": "UNLICENSED"
+}
