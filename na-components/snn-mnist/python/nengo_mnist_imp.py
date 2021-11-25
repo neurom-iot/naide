@@ -101,7 +101,7 @@ with nengo.Network() as net:
     out_p = nengo.Probe(layer)
     out_p_filt = nengo.Probe(layer, synapse=synapse)
 
-sim = nengo_dl.Simulator(net, minibatch_size=minibatch_size)
+sim = nengo_dl.Simulator(net, minibatch_size=minibatch_size, dt=0.1)
 if data_load:
     test_data = {
         inp: np.tile(x_data, (1, n_steps, 1)),
