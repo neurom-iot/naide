@@ -1,0 +1,62 @@
+{
+  "_from": "node-red-contrib-ui-media@1.2.0",
+  "_id": "node-red-contrib-ui-media@1.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-xt93/B2wKrx9Ekx+SiIv5pkqTS2GMcXG4OfdD9WDQamMByEjF3pSWc7RC+yBy0CbBSwEoQVFJsGfVsj3m/lsHg==",
+  "_location": "/node-red-contrib-ui-media",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "node-red-contrib-ui-media@1.2.0",
+    "name": "node-red-contrib-ui-media",
+    "escapedName": "node-red-contrib-ui-media",
+    "rawSpec": "1.2.0",
+    "saveSpec": null,
+    "fetchSpec": "1.2.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-red-contrib-ui-media/-/node-red-contrib-ui-media-1.2.0.tgz",
+  "_shasum": "9e895b599cb6d2fb69ea5e1eff42270f1053ef6a",
+  "_spec": "node-red-contrib-ui-media@1.2.0",
+  "_where": "C:\\Users\\KSKIM2\\.naide",
+  "author": {
+    "name": "Igor Steuck Lopes, Diego Rampim"
+  },
+  "bugs": {
+    "url": "https://github.com/netsmarttech/node-red-contrib-ui-media/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "formidable": "^1.2.1",
+    "mime-types": "^2.1.25",
+    "mkdirp": "^0.5.1"
+  },
+  "deprecated": false,
+  "description": "A simple NODE to allow images and videos on the dashboard",
+  "homepage": "https://github.com/netsmarttech/node-red-contrib-ui-media#readme",
+  "keywords": [
+    "node-red",
+    "media",
+    "ui"
+  ],
+  "license": "Apache-2.0",
+  "main": "ui_image.js",
+  "name": "node-red-contrib-ui-media",
+  "node-red": {
+    "nodes": {
+      "ui_media": "ui_media.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netsmarttech/node-red-contrib-ui-media.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.2.0"
+}

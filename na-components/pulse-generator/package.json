@@ -1,0 +1,17 @@
+{
+  "name": "pulse-generator",
+  "version": "1.0.0",
+  "description": "hci node",
+  "main": "index.js",
+  "keywords": [
+    "pulse-generator"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED",
+  "node-red": {
+    "nodes": {
+      "pulse-generator": "pulse-generator.js"
+    }
+  },
+  "dependencies": {}
+}

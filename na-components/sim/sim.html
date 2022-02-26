@@ -1,0 +1,200 @@
+<!-- YOUR FIRST DATA TEMPLATE TO DISPLAY THE CONFIG SCREEN WHEN THE CONFIG NODE IS DISPLAYED -->
+<script type="text/x-red" data-template-name="sim">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tags"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fas fa-history"></i> 시간 설정</label>
+        <input type="text" id="sim-start-time-input" style="width:100px;" placeholder="ms"> ~
+        <input type="text" id="sim-end-time-input" style="width:100px;" placeholder="ms">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outs"><i class="fa fa-sign-out"></i> 그래프</label>
+        <select id="node-input-outs" style="width:204px">
+            <option value="all">선형</option>
+        </select>
+    </div>
+
+    <div class="form-tips">
+        <b>주석:</b>
+        <br>
+        [시간 설정]
+        <br>
+        범위는 ms(밀리초) 단위를 사용합니다. 최대 범위로 설정할 경우 0 ~ 0 범위로 설정하면 됩니다.
+        <br>
+        [그래프]
+        <br>
+        Simulator 탭에 표시될 그래프의 종류를 설정합니다.
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="sim">
+    <p> 시뮬레이션 컴포넌트 : TimeDomain에 의거하여 flow 들의 결과값 확인이 가능한 컴포넌트로 
+        텍스트와 그래픽스를 지원하며 컴포넌트의 정보와 데이터 출력값에 대한 파일을 json으로 
+        저장 및 입출력 지원 </p>
+</script>
+
+<!-- chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="naide/sim/simulator-utils.js"></script>
+
+<script type="text/javascript">
+    (function ($) {
+     
+        $("#Time_spinner").spinner();
+        
+        RED.nodes.registerType('sim',{
+            category: 'NASimulator',
+            color: '#9966FF',
+            defaults: {
+                name: { value: "sim" },
+                outs:{value:'all'},
+                topic:{value:''},
+                height: {value: 0},
+                filetype: {value:'json'},
+                width: {value: 0, validate: function(v) {
+                    var width = v||0;
+                    var currentGroup = $('#node-input-group').val()||this.group;
+                    var groupNode = RED.nodes.node(currentGroup);
+                    var valid = !groupNode || +width <= +groupNode.width;
+                    $("#node-input-size").toggleClass("input-error",!valid);
+                    return valid;
+                  }
+                }
+            },
+            inputs: 1,
+            outputs: 0, //component connection 
+            outputLabels:["stdout", "sim"],
+            icon: "status.svg",
+            paletteLabel: 'Sim',
+            label: function () {
+                return this.name || "sim"
+            },
+
+            oneditprepare: function () {
+                $("#sim-start-time-input").typedInput({
+                    type: "num",
+                    types: ["num"],
+                });
+                console.log("!");
+                $("#sim-end-time-input").typedInput({
+                    type: "num",
+                    types: ["num"]
+                });
+                console.log("!");
+            },
+
+            oneditsave: function () {
+            },
+
+            onpaletteadd: function() {
+                var options = {
+                    messageMouseEnter: function(sourceId) {
+                        if (sourceId) {
+                            var n = RED.nodes.node(sourceId);
+                            if (n) {
+                                n.highlighted = true;
+                                n.dirty = true;
+                            }
+                            RED.view.redraw();
+                        }
+                    },
+                    messageMouseLeave: function(sourceId) {
+                        if (sourceId) {
+                            var n = RED.nodes.node(sourceId);
+                            if (n) {
+                                n.highlighted = false;
+                                n.dirty = true;
+                            }
+                            RED.view.redraw();
+                        }
+                    },
+                    messageSourceClick: function(sourceId) {
+                        RED.view.reveal(sourceId);
+                    },
+                    clear: function() {
+                        RED.nodes.eachNode(function(node) {
+                            node.highlighted = false;
+                            node.dirty = true;
+                        });
+                        RED.view.redraw();
+                    }
+                };
+
+                var uiComponents = RED.NAIDE.simulator.init(options);
+                RED.sidebar.addTab({
+                    id: "sidebar-nasimulator",
+                    label: "NA-Simulator",
+                    name: "NA-Simulator",
+                    content: uiComponents.content,
+                    //toolbar: uiComponents.footer,
+                    closeable: true,
+                    disableOnEdit: true,
+                    // Select here your own FontAwesome icon that needs to be displayed on the tabsheet in the sidepanel
+                    iconClass: "fa fa-comment",
+                    action: "core:show-debug-tab"
+                });
+                this.handleSimMessage = function(t,o) {
+                    var sourceNode = RED.nodes.node(o.id) || RED.nodes.node(o.z);
+                    if (sourceNode) {
+                        o._source = {id:sourceNode.id,z:sourceNode.z,name:sourceNode.name,type:sourceNode.type,_alias:o._alias};
+                    }
+                    RED.NAIDE.simulator.handleSimMessage(o);
+                };
+                RED.comms.subscribe("sim-message",this.handleSimMessage);
+            }
+
+            // onpaletteremove: function () {
+            //      RED.sidebar.removeTab("sidebar-nasimulator");
+            //      RED.events.off("sidebar:resize", sidebarResizeEventHandler);
+            // },
+            // onpaletteadd: function () {
+            //     // The html content of the sidebar page has been specified a a data-template, from where it can be loaded:
+            //     var content = $($('script[type="text/x-red"][data-template-name="probe_config_sidebar"]').i18n().html());
+
+            //     //Add a new "Na-sim" tabsheet to the sidebar in the flow editor
+            //     var sidebar_t = null
+            //     sidebar_t = RED.sidebar.addTab({
+            //         id: "sidebar-nasimulator",
+            //         label: "NA-Simulator",
+            //         name: "NA-Simulator",
+            //         content: content,
+            //         closeable: true,
+            //         disableOnEdit: true,
+            //         // Select here your own FontAwesome icon that needs to be displayed on the tabsheet in the sidepanel
+            //         iconClass: "fa fa-comment"
+            //     });
+
+
+            //     $("#node-simulator-tab-settings").append($('script[type="text/x-red"][data-template-name="probe_config_sidebar"]').i18n().html());
+            //     var probeTabsheets=null;
+            //     if (probeTabsheets === null) {
+            //         //console.log("!!!")
+            //         probeTabsheets  = RED.tabs.create({
+            //             id: "node-simulator-tabs",
+            //             onchange: function (tab) {
+            //                 $("#node-simulator-tabs-content").children().hide();
+            //                 $("#" + tab.id).show();
+            //                 //////////////////////////////////
+            //             }
+            //         });
+            //         probeTabsheets.addTab({
+            //             id: "node-simulator-tab-simulator",
+            //             label: "Simulator"
+            //         });
+            //         probeTabsheets.addTab({
+            //             id: "node-simulator-tab-settings",
+            //             label: "Settings"     
+            //         });
+            //     }
+            // }//onpaletted
+        });//registerNode
+    })(jQuery);
+</script>
+
+
+

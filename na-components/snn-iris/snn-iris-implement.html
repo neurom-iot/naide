@@ -1,0 +1,30 @@
+<script type="text/x-red" data-template-name="snn-iris-implement">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="snn-iris-implement">
+    <p>Train 데이터를 기반으로 입력된 IRIS Data에 대한 Linear Regression 결과값을 내보냅니다.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('snn-iris-implement',{
+        category: 'NAIDE',
+        color: '#669933',
+        defaults: {
+            name: {value: "SNN-IRIS-Implement"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "function.png",
+        label: function() {
+            return this.name||"snn-iris-implement";
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>

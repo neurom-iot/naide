@@ -1,6 +1,7 @@
 module.exports = function(RED) {
     function <FUNC_NAME>(n) {
         RED.nodes.createNode(this, n);
+        var node = this;
         node.on('input', function(msg) {
             console.log(msg);
             msg.payload = "hello world!"

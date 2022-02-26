@@ -1,0 +1,30 @@
+<script type="text/x-red" data-template-name="n3ml-stbp-component">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="n3ml-stbp-component">
+    <p>N3ML STBP</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('n3ml-stbp-component',{
+        category: 'N3ML',
+        color: '#669933',
+        defaults: {
+            name: {value: "n3ml-stbp-component"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "function.png",
+        label: function() {
+            return this.name||"n3ml-stbp-component";
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>

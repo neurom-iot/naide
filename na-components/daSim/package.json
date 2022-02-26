@@ -1,0 +1,19 @@
+{
+  "name": "dasim",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "daSim"
+  },
+  "node-red": {
+    "nodes": {
+      "daSim": "dasim.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "hci",
+  "license": "UNLICENSED"
+}

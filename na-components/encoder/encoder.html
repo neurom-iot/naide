@@ -1,0 +1,244 @@
+<script type="text/x-red" data-template-name="encoder">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-signal"></i> 데이터 형식</label>
+        <span class = "button-group">
+            <button type = "button"class = "red-ui-button toggle selected color-button-group">흑백</button>
+            <button type = "button"class = "red-ui-button toggle color-button-group ">컬러</button>
+        </span>
+    </div>
+    <!-- <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-repeat"></i> encoder_type</label>
+        <span class = "button-group">
+            <button type = "button"class = "red-ui-button toggle selected e-type-group">simple</button>
+            <button type = "button"class = "red-ui-button toggle e-type-button-group ">simplePoisson</button>
+            <button type = "button"class = "red-ui-button toggle e-type-button-group ">poisson</button>
+            <button type = "button"class = "red-ui-button toggle e-type-button-group ">population</button>
+            <button type = "button"class = "red-ui-button toggle e-type-button-group ">population2</button>
+        </span>
+    </div> 기존 버튼 이름-->
+    <label for="node-input-name"><i class="fa fa-repeat"></i> encoder_type</label>
+    <div class="tabmenu">
+        <ul class = "button-group">
+          <li id="tab1" class="btnCon"> 
+            <input type="radio" checked name="tabmenu" id="tabmenu1" class="tab">
+            <label for="tabmenu1">simple</label>
+            <div class="tabCon">
+                time_interval&nbsp:&nbsp<input type="text" id="simple_time_interval">
+            </div>
+            
+          </li>
+          <li id="tab2" class="btnCon">
+            <input type="radio" name="tabmenu" id="tabmenu2" class="tab">
+            <label for="tabmenu2">simplePoisson</label>
+            <div class="tabCon" >
+                time_interval: <input type="text" id="simple_poisson_time_interval">
+            </div>
+            
+          </li>    
+          <li id="tab3" class="btnCon">
+            <input type="radio" name="tabmenu" id="tabmenu3" class="tab">
+            <label for="tabmenu3">poisson</label>
+            <div class="tabCon" >
+                time_interval: <input type="text" id="poisson_time_interval">
+            </div>
+            
+          </li>
+          <li id="tab4" class="btnCon">
+            <input type="radio" name="tabmenu" id="tabmenu4" class="tab">
+            <label for="tabmenu4">population</label>
+            <div class="tabCon" >
+                neurons: <input type="text" id="population1_neurons"><br>
+                max_firing_time: <input type="text" id="population1_max_firing_time"><br>
+                not_to_fire: <input type="text" id="population1_not_to_fire"><br>
+                dt: <input type="text" id="population1_dt">
+            </div>
+            
+          </li>
+          <li id="tab5" class="btnCon">
+            <input type="radio" name="tabmenu" id="tabmenu5" class="tab">
+            <label for="tabmenu5">populationEncoder</label>
+            <div class="tabCon" >
+                11: <input type="text"><br>
+                22: <input type="text"><br>
+                33: <input type="text">
+            </div>
+            
+          </li>
+        </ul>
+      </div>
+</script>
+<style>
+
+ul{list-style:none;}
+.tabCon > input{
+    float:right;
+}
+.tabmenu{ 
+  position:relative; 
+}
+.tabmenu ul li{
+  display:  inline-block;
+  width:20%; 
+  float:left;
+  text-align:center; 
+  background :#333;
+  line-height:40px;
+}
+.tabmenu label{
+  display:block;
+  width:100%; 
+  height:40px;
+  line-height:40px;
+}
+.tabmenu .button-group .tab{display:none;}
+.tabCon{
+  display:none; 
+  text-align:left; 
+  padding: 20px;
+  position:absolute; 
+  left:0; top:40px; 
+  box-sizing: border-box; 
+  border : 5px solid #333;
+}
+.tabmenu .button-group .tab:checked ~ label{
+  background:#666;
+}
+.tabmenu .button-group .tab:checked ~ .tabCon{
+  display:block;
+}
+</style>
+<script type="text/x-red" data-help-name="encoder">
+    <p>데이터의 인코딩 타입을 결정합니다.</p>
+
+    <h3>상세</h3>
+    <p>Simple encoder : 심플 인코딩 방식입니다.</p>
+    <p>Simple Poisson : 심플 포아송 코딩입니다.</p>
+    <p>Poisson encoder : 포아송 코딩입니다.</p>
+    <p>Population encoder : 인구 코딩입니다.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType("encoder",{
+        category: 'NAIDE_NeuralCoding',
+        color: '#66F8F0',
+        defaults: {
+            name: {value: "encoder"},
+            payload: {value: ""},
+            payloadType: {value: ""},
+            img_color: {value: 0},
+
+            simple_time_interval: {value: 0},
+            simple_poisson_time_interval: {value: 0},
+            poisson_time_interval: {value: 0},
+
+            population1_neurons: {value: 0},
+            population1_max_firing_time: {value: 0},
+            population1_not_to_fire: {value: 0},
+            population1_dt: {value: 0},
+            
+            checked_id: {value: ""}
+        },
+        codeEditable: false,
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name|| "encoder";
+        },
+        oneditprepare: function() {
+            var img_colorIdx = this.img_color;
+            
+            var simple_time_interval = this.simple_time_interval ? this.simple_time_interval : 0;
+            $('#simple_time_interval').val(simple_time_interval);
+            var simple_poisson_time_interval = this.simple_poisson_time_interval ? this.simple_poisson_time_interval : 0;
+            $('#simple_poisson_time_interval').val(simple_poisson_time_interval);
+            var poisson_time_interval = this.poisson_time_interval ? this.poisson_time_interval : 0;
+            $('#poisson_time_interval').val(poisson_time_interval);
+            
+            var population1_neurons = this.population1_neurons ? this.population1_neurons : 0;
+            $('#population1_neurons').val(population1_neurons);
+            var population1_max_firing_time = this.population1_max_firing_time ? this.population1_max_firing_time : 0;
+            $('#population1_max_firing_time').val(population1_max_firing_time);
+            var population1_not_to_fire = this.population1_not_to_fire ? this.population1_not_to_fire : 0;
+            $('#population1_not_to_fire').val(population1_not_to_fire);
+            var population1_dt = this.population1_dt ? this.population1_dt : 0;
+            $('#population1_dt').val(population1_dt);
+
+
+            // tab
+            var tab_idx = this.checked_id ? this.checked_id : 1;
+            $(`#tabmenu${tab_idx}`).trigger("click");
+
+            $(".color-button-group").removeClass("selected");
+            $(".e-type-button-group").removeClass("selected");
+            $(".color-button-group:eq("+ img_colorIdx + ")").addClass("selected");
+            $(".color-button-group").on("click", function() {
+                $(".color-button-group").removeClass("selected");
+                $(this).addClass("selected");
+            })
+            $(".e-type-button-group").on("click", function() {
+                $(".e-type-button-group").removeClass("selected");
+                $(this).addClass("selected");
+            })
+        },
+        oneditsave: function() {
+            var img_colorValue = $(".color-button-group.selected").text();
+
+            this.simple_time_interval = $("#simple_time_interval").val();
+            this.simple_poisson_time_interval = $("#simple_poisson_time_interval").val();
+            this.poisson_time_interval = $("#poisson_time_interval").val();
+            
+            this.population1_neurons = $("#population1_neurons").val();
+            this.population1_max_firing_time = $("#population1_max_firing_time").val();
+            this.population1_not_to_fire = $("#population1_not_to_fire").val();
+            this.population1_dt = $("#population1_dt").val();
+
+
+            this.payloadType = img_colorValue;
+            this.img_color = img_colorValue == "흑백" ? 0 : 1;
+            
+            for (var i = 1; i <= 5; i++) {
+                if ($(`#tabmenu${i}:checked`).val() == 'on') {
+                    this.checked_id = i;
+                    break;
+                }
+            }
+            //console.log(this.checked_id);
+
+        }/*,
+        button: {
+            enabled: function() {
+                return !this.changed
+            },
+            onclick: function() {
+                if (this.changed) {
+                    return RED.notify(RED._("notification.warning", {message:RED._("notification.warnings.undeployedChanges")}),"warning");
+                }
+                var node = this;
+                $.ajax({
+                    url: "inject/"+this.id,
+                    type:"POST",
+                    success: function(resp) {
+                        //RED.notify(node._("encoder.success",{label:label}),{type:"success",id:"encoder"});
+                        RED.notify(node._("encoder.success"),{type:"success",id:"encoder"});
+                    },
+                    error: function(jqXHR,textStatus,errorThrown) {
+                        if (jqXHR.status == 404) {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.not-deployed")}),"error");
+                        } else if (jqXHR.status == 500) {
+                            RED.notify(node._("common.notification.error",{message:node._("encoder.errors.failed")}),"error");
+                        } else if (jqXHR.status == 0) {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.no-response")}),"error");
+                        } else {
+                            RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.unexpected",{status:jqXHR.status,message:textStatus})}),"error");
+                        }
+                    }
+                });
+            }
+        }*/
+    });
+</script>

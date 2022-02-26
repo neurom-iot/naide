@@ -1,0 +1,19 @@
+{
+  "name": "LED-pi_nano",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "LED-pi_nano"
+  },
+  "node-red": {
+    "nodes": {
+      "LED-pi_nano": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}

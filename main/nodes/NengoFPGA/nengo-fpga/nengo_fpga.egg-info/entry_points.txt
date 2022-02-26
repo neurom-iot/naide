@@ -1,0 +1,3 @@
+[nengo.backends]
+fpga = nengo_fpga:Simulator
+

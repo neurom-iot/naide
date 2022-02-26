@@ -1,0 +1,2 @@
+model_checkpoint_path: "lowbirth_params"
+all_model_checkpoint_paths: "lowbirth_params"

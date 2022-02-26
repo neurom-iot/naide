@@ -1,0 +1,18 @@
+{
+  "name": "encoder",
+  "version": "1.0.0",
+  "description": "5-ways for convert data to spike train",
+  "main": "index.js",
+  "keywords": [],
+  "author": "HCI",
+  "license": "UNLICENSED",
+  "node-red": {
+    "nodes": {
+      "encoder": "encoder.js"
+    }
+  },
+  "dependencies": {
+    "numpy": "0.0.1",
+    "torch": "^0.2.7"
+  }
+}

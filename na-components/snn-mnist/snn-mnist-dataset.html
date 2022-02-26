@@ -1,0 +1,31 @@
+<script type="text/x-red" data-template-name="snn-mnist-dataset">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> 이름</label>
+        <input type="text" id="node-input-name" placeholder="이름 입력">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="snn-mnist-dataset">
+    <p>임의의 MNIST 데이터 정보를 뽑아 String 데이터를 내보냅니다.</p>
+    <p>MNIST 데이터는 입력되는 time 값에 따라 범위를 제한할 수 있습니다. 범위 : 0 ~ 10000</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('snn-mnist-dataset',{
+        category: 'NAIDE',
+        color: '#999999',
+        defaults: {
+            name: {value: "SNN-MNIST-Dataset"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"snn-mnist-dataset";
+        },
+        oneditprepare: function() {
+        },
+        oneditsave: function() {
+        }
+    });
+</script>

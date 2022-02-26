@@ -1,0 +1,22 @@
+{
+  "name": "snn-lowbirth-component",
+  "version": "1.0.0",
+  "description": "hci_snn-lowbirth-component",
+  "main": "index.js",
+  "scripts": {
+    "test": "snn-lowbirth-component"
+  },
+  "node-red": {
+    "nodes": {
+      "snn-lowbirth-dataset": "snn-lowbirth-dataset.js",
+      "snn-lowbirth-implement": "snn-lowbirth-implement.js",
+      "snn-lowbirth-print": "snn-lowbirth-print.js"
+    }
+  },
+  "keywords": [
+    "snn-lowbirth-component"
+  ],
+  "author": "HCI",
+  "license": "UNLICENSED"
+}
+

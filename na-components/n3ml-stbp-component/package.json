@@ -1,0 +1,20 @@
+{
+  "name": "n3ml-stbp-component",
+  "version": "1.0.0",
+  "description": "n3ml-stbp-component",
+  "main": "index.js",
+  "scripts": {
+    "test": "n3ml-stbp-component"
+  },
+  "node-red": {
+    "nodes": {
+      "n3ml-stbp-component": "n3ml-stbp-component.js"
+    }
+  },
+  "keywords": [
+    "n3ml-stbp-component"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}
+

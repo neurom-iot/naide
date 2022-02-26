@@ -1,0 +1,19 @@
+{
+  "name": "Segment-coral",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "Segment-coral"
+  },
+  "node-red": {
+    "nodes": {
+      "Segment-coral": "src/hnu/iot-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}

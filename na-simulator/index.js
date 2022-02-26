@@ -80,7 +80,8 @@ function addWidget(RED, options) {
     ui_control.templateScope = options.hasOwnProperty("templateScope") ? options.templateScope : "local";
     var ui_options = {
         node: node,
-        control: ui_control
+        control: ui_control,
+        msgFunc: options.msgFunc
     }
     if (is_local) {
         ui_options.group = group;

@@ -1,0 +1,19 @@
+{
+  "name": "NeromorphicBoard",
+  "version": "1.0.0",
+  "description": "%DESCRIPTION%",
+  "main": "index.js",
+  "scripts": {
+    "test": "NeromorphicBoard"
+  },
+  "node-red": {
+    "nodes": {
+      "NeromorphicBoard": "src/hnu/snn-component.js"
+    }
+  },
+  "keywords": [
+    "%KEYWORD%"
+  ],
+  "author": "jjh",
+  "license": "UNLICENSED"
+}

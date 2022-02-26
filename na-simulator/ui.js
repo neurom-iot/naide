@@ -46,9 +46,9 @@ ev.setMaxListeners(0);
 
 // default manifest.json to be returned as required.
 var mani = {
-    "name": "Node-RED Dashboard",
+    "name": "NAIDE Dashboard",
     "short_name": "Dashboard",
-    "description": "A dashboard for Node-RED",
+    "description": "A dashboard for NAIDE",
     "start_url": "./#/0",
     "background_color": "#910000",
     "theme_color": "#910000",
@@ -139,13 +139,16 @@ function add(opt) {
     var remove = addControl(opt.tab, opt.group, opt.control);
 
     opt.node.on("input", function(msg) {
+        if (typeof opt.msgFunc !== 'undefined') {
+            msg = opt.msgFunc(msg);
+        }
         if (typeof msg.enabled === 'boolean') {
+            
             var state = replayMessages[opt.node.id];
             if (!state) { replayMessages[opt.node.id] = state = {id: opt.node.id}; }
             state.disabled = !msg.enabled;
             io.emit(updateValueEventName, state);
         }
-
         // remove res and req as they are often circular
         if (msg.hasOwnProperty("res")) { delete msg.res; }
         if (msg.hasOwnProperty("req")) { delete msg.req; }
@@ -535,8 +538,8 @@ function addLink(name, link, icon, order, target) {
 
 function addBaseConfig(config) {
     if (config) { baseConfiguration = config; }
-    mani.name = config.site ? config.site.name : "Node-RED Dashboard";
-    mani.short_name = mani.name.replace("Node-RED","").trim();
+    mani.name = config.site ? config.site.name : "NAIDE Dashboard";
+    mani.short_name = mani.name.replace("NAIDE","").trim();
     mani.background_color = config.theme.themeState["page-titlebar-backgroundColor"].value;
     mani.theme_color = config.theme.themeState["page-titlebar-backgroundColor"].value;
     updateUi();
