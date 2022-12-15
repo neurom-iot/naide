@@ -38,7 +38,7 @@
         "cors": "2.8.5",
         "cron": "1.7.1",
         "denque": "1.4.1",
-        "express": "4.17.1",
+        "express": "4.17.3",
         "express-session": "1.16.2",
         "fs-extra": "8.1.0",
         "fs.notify": "0.0.4",
