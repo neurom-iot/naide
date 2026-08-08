@@ -47,7 +47,7 @@
         "i18next": "15.1.2",
         "iconv-lite": "0.5.0",
         "is-utf8": "0.2.1",
-        "js-yaml": "3.13.1",
+        "js-yaml": "3.15.1",
         "json-stringify-safe": "5.0.1",
         "jsonata": "1.7.0",
         "media-typer": "1.1.0",
